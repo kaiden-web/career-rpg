@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마케팅팀 캐릭터 시트</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #12121a;
+    --bg3: #1a1a26;
+    --border: rgba(255,255,255,0.07);
+    --border-active: rgba(120,100,255,0.4);
+    --text: #e8e8f0;
+    --text-muted: #6b6b80;
+    --text-dim: #3a3a50;
+    --accent: #7864ff;
+    --accent2: #ff6b6b;
+    --accent3: #ffd166;
+    --accent4: #06d6a0;
+    --accent5: #4ecdc4;
+    --str: #ff6b6b;
+    --agi: #4ecdc4;
+    --sen: #ffd166;
+    --int: #7864ff;
+    --cha: #ff9f43;
+    --sta: #06d6a0;
+    --lv0: #3a3a50;
+    --lv1: #4a6fa5;
+    --lv2: #2ecc71;
+    --lv3: #f39c12;
+    --lv4: #e74c3c;
+    --lv5: #9b59b6;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── 배경 노이즈 효과 ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(120,100,255,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(6,214,160,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── 헤더 ── */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .header-left {}
+  .game-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(120,100,255,0.15);
+    border: 1px solid rgba(120,100,255,0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .game-badge::before {
+    content: '◆';
+    font-size: 8px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+  }
+
+  h1 span {
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  /* ── 탭 네비 ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 4px;
+    margin-bottom: 28px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 9px 12px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 12px rgba(120,100,255,0.3);
+  }
+
+  .tab-btn:hover:not(.active) {
+    background: var(--bg3);
+    color: var(--text);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── 섹션 카드 ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: rgba(255,255,255,0.12); }
+
+  .card-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 14px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* ── 플레이어 정보 ── */
+  .player-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .input-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  input[type="text"], select, textarea {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  input[type="text"]:focus, select:focus, textarea:focus {
+    border-color: var(--border-active);
+  }
+
+  select option { background: var(--bg2); }
+
+  textarea { resize: vertical; min-height: 80px; }
+
+  /* ── 고유 특성 선택 ── */
+  .passive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 8px;
+  }
+
+  .passive-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .passive-item:hover {
+    border-color: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .passive-item.selected {
+    border-color: var(--accent);
+    background: rgba(120,100,255,0.1);
+  }
+
+  .passive-item.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .passive-item.locked:hover {
+    border-color: var(--border);
+    background: var(--bg3);
+  }
+
+  .passive-check {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--border-active);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    transition: all 0.15s;
+  }
+
+  .passive-item.selected .passive-check {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .passive-item.selected .passive-check::after {
+    content: '✓';
+    color: white;
+    font-weight: 700;
+  }
+
+  .passive-name {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    flex: 1;
+    color: var(--text);
+  }
+
+  .passive-name small {
+    display: block;
+    font-size: 12px;
+    color: rgba(200, 200, 220, 0.75);
+    font-weight: 400;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  .stat-badge {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .stat-STR { background: rgba(255,107,107,0.2); color: var(--str); }
+  .stat-AGI { background: rgba(78,205,196,0.2); color: var(--agi); }
+  .stat-SEN { background: rgba(255,209,102,0.2); color: var(--sen); }
+  .stat-INT { background: rgba(120,100,255,0.2); color: var(--int); }
+  .stat-CHA { background: rgba(255,159,67,0.2); color: var(--cha); }
+  .stat-STA { background: rgba(6,214,160,0.2); color: var(--sta); }
+
+  /* ── 스탯 바 ── */
+  .stats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 40px;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .stat-name {
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-name-en { color: var(--text); }
+  .stat-name-kr { font-size: 10px; color: var(--text-muted); font-family: 'Noto Sans KR', sans-serif; }
+
+  .stat-bar-wrap {
+    position: relative;
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .stat-bar-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .stat-bar-wrap:hover .stat-bar-fill {
+    filter: brightness(1.2);
+  }
+
+  /* 클릭 세그먼트 */
+  .stat-segments {
+    display: flex;
+    gap: 2px;
+    height: 6px;
+  }
+
+  .stat-seg {
+    flex: 1;
+    border-radius: 3px;
+    background: var(--bg3);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .stat-seg.active { }
+  .stat-seg:hover { opacity: 0.8; }
+
+  .stat-value {
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    text-align: right;
+  }
+
+  .stat-fill-STR { background: var(--str); }
+  .stat-fill-AGI { background: var(--agi); }
+  .stat-fill-SEN { background: var(--sen); }
+  .stat-fill-INT { background: var(--int); }
+  .stat-fill-CHA { background: var(--cha); }
+  .stat-fill-STA { background: var(--sta); }
+
+  .stat-color-STR { color: var(--str); }
+  .stat-color-AGI { color: var(--agi); }
+  .stat-color-SEN { color: var(--sen); }
+  .stat-color-INT { color: var(--int); }
+  .stat-color-CHA { color: var(--cha); }
+  .stat-color-STA { color: var(--sta); }
+
+  /* 증거 입력 */
+  .evidence-box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-top: 8px;
+    display: none;
+  }
+
+  .evidence-box.open { display: block; }
+
+  .evidence-row {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+  }
+
+  .evidence-row:last-child { margin-bottom: 0; }
+
+  .evidence-tag {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    padding-top: 10px;
+    font-weight: 500;
+  }
+
+  /* ── 액티브 스킬 ── */
+  .skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .skill-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .skill-item:hover { border-color: rgba(255,255,255,0.12); }
+
+  .skill-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .skill-name {
+    font-size: 14px;
+    font-weight: 700;
+    flex: 1;
+  }
+
+  .skill-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-top: 2px;
+  }
+
+  /* 레벨 선택 세그먼트 버튼 */
+  .level-selector {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .level-btn {
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .level-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+  .level-btn.lv0.active { background: rgba(58,58,80,0.8); border-color: var(--lv0); color: #aaa; }
+  .level-btn.lv1.active { background: rgba(74,111,165,0.3); border-color: var(--lv1); color: #6fa3d8; }
+  .level-btn.lv2.active { background: rgba(46,204,113,0.2); border-color: var(--lv2); color: var(--lv2); }
+  .level-btn.lv3.active { background: rgba(243,156,18,0.2); border-color: var(--lv3); color: var(--lv3); }
+  .level-btn.lv4.active { background: rgba(231,76,60,0.2); border-color: var(--lv4); color: var(--lv4); }
+  .level-btn.lv5.active { background: rgba(155,89,182,0.2); border-color: var(--lv5); color: var(--lv5); }
+
+  /* 레벨 정의 참조 박스 */
+  .level-ref {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .level-def {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.02);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .level-def:hover { background: rgba(255,255,255,0.05); }
+
+  .level-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .level-def-text {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .level-def-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .level-def-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-top: 1px;
+  }
+
+  /* ── 스킬트리 (성장경로) ── */
+  .skill-tree {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .tree-node {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .tree-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  .tree-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 700;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tree-dot.current {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 16px rgba(120,100,255,0.3);
+  }
+
+  .tree-dot.future {
+    border-color: var(--accent3);
+    color: var(--accent3);
+    box-shadow: 0 0 16px rgba(255,209,102,0.2);
+  }
+
+  .tree-connector {
+    width: 2px;
+    height: 24px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent3));
+    opacity: 0.3;
+    margin: 4px 0;
+  }
+
+  .tree-content {
+    flex: 1;
+    padding-top: 4px;
+  }
+
+  .tree-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .tree-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .tree-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .tree-tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  /* ── 최종 캐릭터 시트 출력 ── */
+  .character-sheet {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .cs-header {
+    background: linear-gradient(135deg, rgba(120,100,255,0.2), rgba(6,214,160,0.1));
+    border-bottom: 1px solid var(--border);
+    padding: 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .cs-name {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  .cs-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .cs-body { padding: 24px; }
+
+  .cs-section {
+    margin-bottom: 24px;
+  }
+
+  .cs-section-title {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .cs-passives {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cs-passive-tag {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(120,100,255,0.08);
+  }
+
+  .cs-stats-mini {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+  }
+
+  .cs-stat-mini {
+    text-align: center;
+    padding: 10px 6px;
+    background: var(--bg3);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .cs-stat-mini-val {
+    font-size: 20px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .cs-stat-mini-name {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    margin-top: 2px;
+  }
+
+  .cs-skills-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .cs-skills-table tr {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cs-skills-table tr:last-child { border-bottom: none; }
+
+  .cs-skills-table td {
+    padding: 8px 0;
+    font-size: 13px;
+  }
+
+  .cs-skills-table td:last-child {
+    text-align: right;
+  }
+
+  .lv-pill {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .lv-pill-0 { background: rgba(58,58,80,0.8); color: #888; }
+  .lv-pill-1 { background: rgba(74,111,165,0.3); color: #6fa3d8; }
+  .lv-pill-2 { background: rgba(46,204,113,0.2); color: var(--lv2); }
+  .lv-pill-3 { background: rgba(243,156,18,0.2); color: var(--lv3); }
+  .lv-pill-4 { background: rgba(231,76,60,0.2); color: var(--lv4); }
+  .lv-pill-5 { background: rgba(155,89,182,0.2); color: var(--lv5); }
+
+  /* 육각형 레이더 */
+  .radar-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+  }
+
+  /* ── 버튼 ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: var(--radius-sm);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 4px 16px rgba(120,100,255,0.3);
+  }
+
+  .btn-primary:hover {
+    background: #8f78ff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(120,100,255,0.4);
+  }
+
+  .btn-secondary {
+    background: var(--bg3);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  /* 레이더 차트 */
+  svg.radar text {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    fill: var(--text-muted);
+  }
+
+  /* 진행 표시 */
+  .step-indicator {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .step-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .step-dot.done {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(120,100,255,0.5);
+  }
+
+  /* ── 커리어 로드맵 ── */
+  .road-stage {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .road-stage:hover { border-color: rgba(255,255,255,0.12); }
+
+  .road-stage-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    cursor: pointer;
+    user-select: none;
+    gap: 12px;
+  }
+
+  .road-stage-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    flex: 1;
+  }
+
+  .road-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .current-stage { background: rgba(120,100,255,0.2); border: 2px solid var(--accent); color: var(--accent); }
+  .mid-stage     { background: rgba(6,214,160,0.15);  border: 2px solid var(--accent4); color: var(--accent4); }
+  .final-stage   { background: rgba(255,209,102,0.15); border: 2px solid var(--accent3); color: var(--accent3); }
+
+  .road-stage-title {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .road-stage-sub {
+    font-size: 12px;
+    color: rgba(200,200,220,0.7);
+    font-weight: 400;
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  .road-class-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+
+  .current-badge { background: rgba(120,100,255,0.2); color: var(--accent); border: 1px solid rgba(120,100,255,0.4); }
+  .mid-badge     { background: rgba(6,214,160,0.15);  color: var(--accent4); border: 1px solid rgba(6,214,160,0.3); }
+  .final-badge   { background: rgba(255,209,102,0.15); color: var(--accent3); border: 1px solid rgba(255,209,102,0.3); }
+
+  .road-chevron {
+    color: var(--text-muted);
+    font-size: 16px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .road-stage-body {
+    display: none;
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--border);
+  }
+
+  .road-stage-body.open { display: block; }
+
+  .road-metaphor {
+    font-size: 12px;
+    font-style: italic;
+    color: rgba(200,200,220,0.65);
+    padding: 12px 14px;
+    border-left: 3px solid rgba(120,100,255,0.4);
+    background: rgba(120,100,255,0.05);
+    border-radius: 0 6px 6px 0;
+    margin: 14px 0 16px;
+    line-height: 1.6;
+  }
+
+  .road-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .road-col {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+  }
+
+  .road-col-title {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .road-col-body {
+    font-size: 12px;
+    color: rgba(200,200,220,0.8);
+    line-height: 1.6;
+  }
+
+  .road-skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .road-skill-tag {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .road-skill-tag.unlock {
+    border-color: rgba(6,214,160,0.3);
+    color: var(--accent4);
+    background: rgba(6,214,160,0.07);
+  }
+
+  .road-skill-tag.final {
+    border-color: rgba(255,209,102,0.3);
+    color: var(--accent3);
+    background: rgba(255,209,102,0.07);
+  }
+
+  .road-quest {
+    background: rgba(120,100,255,0.07);
+    border: 1px solid rgba(120,100,255,0.25);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+
+  .road-quest-label {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .road-quest-text {
+    font-size: 12px;
+    color: rgba(200,200,220,0.85);
+    line-height: 1.6;
+  }
+
+  .road-unlock-check {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .road-check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    color: rgba(200,200,220,0.75);
+    line-height: 1.5;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .road-check-row:hover { background: rgba(255,255,255,0.03); border-color: var(--border); }
+
+  .road-check-row input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .road-check-row:has(input:checked) {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .road-arrow-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 0;
+    gap: 4px;
+  }
+
+  .road-arrow-line {
+    width: 2px;
+    height: 20px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent4));
+    opacity: 0.4;
+  }
+
+  .road-arrow-label {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .road-grid { grid-template-columns: 1fr; }
+    .road-stage-title { font-size: 13px; }
+  }
+
+  /* notice */
+  .notice {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 10px 14px;
+    background: rgba(120,100,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    line-height: 1.6;
+  }
+
+  /* 레이더 오버레이 */
+  .radar-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* 반응형 */
+  @media (max-width: 600px) {
+    .player-info { grid-template-columns: 1fr; }
+    .passive-grid { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 70px 1fr 36px; gap: 10px; }
+    .level-ref { grid-template-columns: 1fr 1fr; }
+    .cs-stats-mini { grid-template-columns: repeat(3, 1fr); }
+    .level-selector { gap: 3px; }
+    .level-btn { font-size: 10px; padding: 4px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 헤더 -->
+  <div class="header">
+    <div class="header-left">
+      <div class="game-badge">MARKETING TEAM · CAREER RPG v1.0</div>
+      <h1>마케팅팀 <span>캐릭터 시트</span></h1>
+      <p class="subtitle">행동 · 결과 · 재현성 기반 역량 게임화 시스템</p>
+    </div>
+  </div>
+
+  <!-- 진행 표시 -->
+  <div class="step-indicator" id="stepIndicator">
+    <div class="step-dot" id="dot0"></div>
+    <div class="step-dot" id="dot1"></div>
+    <div class="step-dot" id="dot2"></div>
+    <div class="step-dot" id="dot3"></div>
+    <div class="step-dot" id="dot4"></div>
+    <span style="font-size:11px;color:var(--text-muted);font-family:'DM Mono',monospace;margin-left:4px" id="stepLabel">0 / 4 완료</span>
+  </div>
+
+  <!-- 탭 -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('basic')">① 기본정보</button>
+    <button class="tab-btn" onclick="switchTab('passive')">② 고유특성</button>
+    <button class="tab-btn" onclick="switchTab('stats')">③ 6대 스탯</button>
+    <button class="tab-btn" onclick="switchTab('skills')">④ 스킬 숙련도</button>
+    <button class="tab-btn" onclick="switchTab('sheet')">⑤ 캐릭터 시트</button>
+    <button class="tab-btn" onclick="switchTab('roadmap')">⑥ 커리어 로드맵</button>
+  </div>
+
+  <!-- ① 기본 정보 -->
+  <div class="tab-panel active" id="tab-basic">
+    <div class="card">
+      <div class="card-title">플레이어 기본 정보</div>
+      <div class="player-info">
+        <div class="input-group">
+          <label class="input-label">이름</label>
+          <input type="text" id="playerName" placeholder="홍길동">
+        </div>
+        <div class="input-group">
+          <label class="input-label">포지션</label>
+          <input type="text" id="playerRole" placeholder="퍼포먼스 마케터 / 콘텐츠 마케터 / 브랜드 마케터">
+        </div>
+        <div class="input-group">
+          <label class="input-label">경력 연차</label>
+          <select id="playerYear">
+            <option value="">선택</option>
+            <option>1년 미만</option>
+            <option>1~2년</option>
+            <option>3~5년</option>
+            <option>6~10년</option>
+            <option>10년 이상</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label class="input-label">소속 팀</label>
+          <input type="text" id="playerTeam" placeholder="마케팅팀">
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">현재 주요 업무 (한 줄)</label>
+        <input type="text" id="playerJob" placeholder="예) 퍼포먼스 광고 운영 및 콘텐츠 기획">
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="switchTab('passive')">다음 → 고유특성 선택</button>
+    </div>
+  </div>
+
+  <!-- ② 고유 특성 -->
+  <div class="tab-panel" id="tab-passive">
+    <div class="card">
+      <div class="card-title">고유 특성 (Passive Skills) — 2개 선택</div>
+      <p class="notice" style="margin-bottom:16px">나의 본질적인 기질에 가장 가까운 것을 골라주세요. 최대 2개 선택 가능합니다.</p>
+      <div class="passive-grid" id="passiveGrid"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="switchTab('basic')">← 이전</button>
+      <button class="btn btn-primary" onclick="switchTab('stats')">다음 → 6대 스탯 입력</button>
+    </div>
+  </div>
+
+  <!-- ③ 6대 스탯 -->
+  <div class="tab-panel" id="tab-stats">
+    <div class="card">
+      <div class="card-title">6대 핵심 스탯 (1~10점)</div>
+      <p class="notice" style="margin-bottom:20px">점수 바를 클릭해 점수를 설정하세요. 각 스탯 클릭 시 증거 입력 폼이 열립니다.</p>
+      <div class="stats-grid" id="statsGrid"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="switchTab('passive')">← 이전</button>
+      <button class="btn btn-primary" onclick="switchTab('skills')">다음 → 스킬 숙련도</button>
+    </div>
+  </div>
+
+  <!-- ④ 스킬 숙련도 -->
+  <div class="tab-panel" id="tab-skills">
+    <div class="card">
+      <div class="card-title">액티브 스킬 숙련도</div>
+      <p class="notice" style="margin-bottom:20px">각 스킬의 현재 레벨을 선택하세요. 레벨 기준은 ① 기본정보 탭 하단을 참조하세요.</p>
+      <div class="skill-list" id="skillList"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="switchTab('stats')">← 이전</button>
+      <button class="btn btn-primary" onclick="generateSheet()">⚡ 캐릭터 시트 생성</button>
+    </div>
+  </div>
+
+  <!-- ⑤ 캐릭터 시트 -->
+  <div class="tab-panel" id="tab-sheet">
+    <div id="sheetOutput"></div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="switchTab('skills')">← 수정하기</button>
+      <button class="btn btn-primary" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
+    </div>
+  </div>
+
+  <!-- ⑥ 커리어 로드맵 -->
+  <div class="tab-panel" id="tab-roadmap">
+
+    <div class="card">
+      <div class="card-title">전직 로드맵 — Channel Expert → Growth Marketer → Brand Builder</div>
+      <p class="notice" style="margin-bottom:24px">현재의 강점을 버리는 게 아니라, <strong style="color:var(--accent)">디딤돌 삼아 다음 단계를 해금(Unlock)</strong>하는 전직 퀘스트입니다.</p>
+
+      <!-- Stage 1 -->
+      <div class="road-stage" id="stage1">
+        <div class="road-stage-header" onclick="toggleStage('stage1')">
+          <div class="road-stage-left">
+            <div class="road-num current-stage">1</div>
+            <div>
+              <div class="road-stage-title">
+                <span class="road-class-badge current-badge">현재 단계</span>
+                Channel Expert — The Executor
+              </div>
+              <div class="road-stage-sub">정해진 채널과 예산 안에서 최고 ROAS를 뽑아내는 실행 전문가</div>
+            </div>
+          </div>
+          <div class="road-chevron">▾</div>
+        </div>
+        <div class="road-stage-body open" id="body-stage1">
+          <div class="road-metaphor">"주어진 전장에서 가장 효율적으로 싸우는 정예 전사 — 채널 특성을 꿰고 광고비 1원의 낭비도 허용하지 않는 실행력"</div>
+          <div class="road-grid">
+            <div class="road-col">
+              <div class="road-col-title">핵심 미션</div>
+              <div class="road-col-body">맡은 채널에서 ROAS·CTR·전환율을 최대화. 데이터를 보며 빠르게 소재·타겟·입찰을 최적화하는 것이 핵심.<br><br>
+                <span style="color:var(--accent);font-size:11px;font-family:'DM Mono',monospace">→ 채널을 완전히 장악하고 재현 가능한 성과를 만드는 단계</span>
+              </div>
+            </div>
+            <div class="road-col">
+              <div class="road-col-title">핵심 역량</div>
+              <div class="road-skill-tags">
+                <span class="road-skill-tag">매체 세팅·최적화</span>
+                <span class="road-skill-tag">소재 A/B 테스트</span>
+                <span class="road-skill-tag">타겟 설계</span>
+                <span class="road-skill-tag">성과 리포팅</span>
+                <span class="road-skill-tag">예산 배분</span>
+              </div>
+            </div>
+            <div class="road-col">
+              <div class="road-col-title">성장 지표 (KPI)</div>
+              <div class="road-col-body">
+                ROAS <span style="color:var(--accent);font-family:'DM Mono',monospace">≥ 300%</span><br>
+                CTR <span style="color:var(--accent);font-family:'DM Mono',monospace">≥ 2%</span><br>
+                CPC 절감률 <span style="color:var(--accent);font-family:'DM Mono',monospace">전월比 ↓</span><br>
+                전환율 <span style="color:var(--accent);font-family:'DM Mono',monospace">≥ 3%</span><br>
+                광고비 집행 정확도 <span style="color:var(--accent);font-family:'DM Mono',monospace">≥ 95%</span>
+              </div>
+            </div>
+          </div>
+          <div class="road-quest">
+            <div class="road-quest-label">🎯 전직 퀘스트</div>
+            <div class="road-quest-text">2개 이상 매체를 동시 운영하며 각 채널별 ROAS 300% 이상 달성하고, 재현 가능한 최적화 매뉴얼 보유하기</div>
+          </div>
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-muted);margin:14px 0 8px;letter-spacing:0.06em">UNLOCK CHECKLIST</div>
+          <div class="road-unlock-check">
+            <label class="road-check-row"><input type="checkbox" id="q1a" onchange="updateUnlock()"><span>2개 이상 매체 단독 운영 및 ROAS 300% 이상 달성 경험 보유</span></label>
+            <label class="road-check-row"><input type="checkbox" id="q1b" onchange="updateUnlock()"><span>소재·타겟·입찰 A/B 테스트 결과를 데이터로 정리한 문서 보유</span></label>
+            <label class="road-check-row"><input type="checkbox" id="q1c" onchange="updateUnlock()"><span>채널별 최적화 매뉴얼 문서화 및 팀 공유 경험</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="road-arrow-wrap">
+        <div class="road-arrow-line"></div>
+        <div class="road-arrow-label"><span id="unlock-txt1">퀘스트 달성 시 다음 단계 해금 ↓</span></div>
+      </div>
+
+      <!-- Stage 2 -->
+      <div class="road-stage" id="stage2">
+        <div class="road-stage-header" onclick="toggleStage('stage2')">
+          <div class="road-stage-left">
+            <div class="road-num mid-stage">2</div>
+            <div>
+              <div class="road-stage-title">
+                <span class="road-class-badge mid-badge">과도기 전직</span>
+                Growth Marketer — The Strategist
+              </div>
+              <div class="road-stage-sub">채널을 넘어 고객 여정 전체를 설계하고 매출 구조를 최적화하는 전략가</div>
+            </div>
+          </div>
+          <div class="road-chevron">▾</div>
+        </div>
+        <div class="road-stage-body open" id="body-stage2">
+          <div class="road-metaphor" style="border-color:rgba(6,214,160,0.35);background:rgba(6,214,160,0.05);">"단일 전장의 전사에서 전체 전쟁을 설계하는 전략가로 — 광고 클릭 이후 결제·재구매·LTV까지 고객 여정 전체를 책임지는 단계"</div>
+          <div class="road-grid">
+            <div class="road-col">
+              <div class="road-col-title">핵심 미션</div>
+              <div class="road-col-body">단순 광고 성과를 넘어 CAC·LTV·BEP를 계산하고 "이 마케팅이 실제로 이익을 내는가"를 판단. 채널 믹스와 프로모션 구조를 통합 설계.<br><br>
+                <span style="color:var(--accent4);font-size:11px;font-family:'DM Mono',monospace">→ 광고비를 쓰는 것에서 매출 구조를 설계하는 것으로 전환</span>
+              </div>
+            </div>
+            <div class="road-col">
+              <div class="road-col-title">새로 획득할 역량</div>
+              <div class="road-skill-tags">
+                <span class="road-skill-tag unlock">LTV·CAC 분석</span>
+                <span class="road-skill-tag unlock">프로모션 BEP 설계</span>
+                <span class="road-skill-tag unlock">퍼널 최적화</span>
+                <span class="road-skill-tag unlock">CRM·리텐션</span>
+                <span class="road-skill-tag unlock">채널 믹스 전략</span>
+                <span class="road-skill-tag unlock">그로스 해킹</span>
+              </div>
+            </div>
+            <div class="road-col">
+              <div class="road-col-title">성장 지표 (KPI)</div>
+              <div class="road-col-body">
+                CAC 대비 LTV 비율 <span style="color:var(--accent4);font-family:'DM Mono',monospace">≥ 3배</span><br>
+                재구매율 <span style="color:var(--accent4);font-family:'DM Mono',monospace">≥ 25%</span><br>
+                프로모션 이익률 <span style="color:var(--accent4);font-family:'DM Mono',monospace">≥ 20%</span><br>
+                퍼널 전환율 개선 <span style="color:var(--accent4);font-family:'DM Mono',monospace">+15%↑</span><br>
+                마케팅 기여 매출 <span style="color:var(--accent4);font-family:'DM Mono',monospace">↑ 성장</span>
+              </div>
+            </div>
+          </div>
+          <div style="background:rgba(6,214,160,0.05);border:1px solid rgba(6,214,160,0.15);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--accent4);margin-bottom:10px;letter-spacing:0.06em">STAGE 1 → 2 핵심 전환점</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div style="font-size:12px;color:rgba(200,200,220,0.7)">
+                <div style="color:var(--text-muted);font-size:10px;margin-bottom:4px">Stage 1에서 하던 것</div>
+                "ROAS·CTR 높이기"<br>"소재 테스트·최적화"<br>"매체별 예산 집행"
+              </div>
+              <div style="font-size:12px;color:rgba(200,200,220,0.85)">
+                <div style="color:var(--accent4);font-size:10px;margin-bottom:4px">Stage 2에서 추가되는 것</div>
+                "이 캠페인이 실제로 이익을 냈는가?"<br>"고객이 재구매하는 구조를 만들었는가?"<br>"전체 퍼널의 병목이 어디인가?"
+              </div>
+            </div>
+          </div>
+          <div class="road-quest" style="border-color:rgba(6,214,160,0.3);background:rgba(6,214,160,0.06);">
+            <div class="road-quest-label" style="color:var(--accent4)">🎯 전직 퀘스트</div>
+            <div class="road-quest-text">프로모션 1개의 CAC·LTV·BEP를 직접 계산하고, 이익률 20% 이상인 캠페인 구조를 설계·실행·검증하기</div>
+          </div>
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-muted);margin:14px 0 8px;letter-spacing:0.06em">UNLOCK CHECKLIST</div>
+          <div class="road-unlock-check">
+            <label class="road-check-row"><input type="checkbox" id="q2a" onchange="updateUnlock()"><span>CAC·LTV·BEP 계산 결과를 포함한 캠페인 분석 보고서 1개 이상 작성</span></label>
+            <label class="road-check-row"><input type="checkbox" id="q2b" onchange="updateUnlock()"><span>재구매율 또는 리텐션 개선을 목표로 한 CRM 캠페인 직접 기획·실행</span></label>
+            <label class="road-check-row"><input type="checkbox" id="q2c" onchange="updateUnlock()"><span>퍼널 분석으로 병목 구간 특정 및 개선 후 전환율 수치 비교 데이터 보유</span></label>
+            <label class="road-check-row"><input type="checkbox" id="q2d" onchange="updateUnlock()"><span>채널 믹스 전략 문서 작성 — 각 채널의 역할(인지·고려·전환·재구매) 정의</span></label>
+            <label class="road-check-row"><input type="checkbox" id="q2e" onchange="updateUnlock()"><span>이익률 기준 프로모션 성과 평가 루틴 보유 (단순 ROAS 이상의 지표 관리)</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="road-arrow-wrap">
+        <div class="road-arrow-line"></div>
+        <div class="road-arrow-label"><span id="unlock-txt2">퀘스트 달성 시 최종 전직 해금 ↓</span></div>
+      </div>
+
+      <!-- Stage 3 -->
+      <div class="road-stage" id="stage3">
+        <div class="road-stage-header" onclick="toggleStage('stage3')">
+          <div class="road-stage-left">
+            <div class="road-num final-stage">3</div>
+            <div>
+              <div class="road-stage-title">
+                <span class="road-class-badge final-badge">최종 목표</span>
+                Brand Builder — The Visionary
+              </div>
+              <div class="road-stage-sub">광고 없이도 고객이 먼저 찾아오는 브랜드 자산을 만드는 마케터</div>
+            </div>
+          </div>
+          <div class="road-chevron">▾</div>
+        </div>
+        <div class="road-stage-body open" id="body-stage3">
+          <div class="road-metaphor" style="border-color:rgba(255,209,102,0.35);background:rgba(255,209,102,0.06);">"광고비를 태워 고객을 사는 것에서, 브랜드 자체가 고객을 끌어당기는 자석이 되는 단계 — Channel Expert의 실행력 + Growth Marketer의 구조 설계가 합쳐져, 이제는 지속 가능한 브랜드 자산을 구축"</div>
+          <div class="road-grid">
+            <div class="road-col">
+              <div class="road-col-title">핵심 미션</div>
+              <div class="road-col-body">광고 의존도를 줄이고 브랜드 인지도·팬덤·콘텐츠 자산으로 자연 유입을 만드는 것. "이 브랜드가 없어지면 아쉬운 고객"을 만드는 것이 핵심.<br><br>
+                <span style="color:var(--accent3);font-size:11px;font-family:'DM Mono',monospace">→ 광고비를 쓸수록 성장하는 것에서 브랜드가 스스로 성장하는 구조로 전환</span>
+              </div>
+            </div>
+            <div class="road-col">
+              <div class="road-col-title">새로 획득할 역량</div>
+              <div class="road-skill-tags">
+                <span class="road-skill-tag final">브랜드 전략 수립</span>
+                <span class="road-skill-tag final">콘텐츠 자산 구축</span>
+                <span class="road-skill-tag final">커뮤니티 마케팅</span>
+                <span class="road-skill-tag final">PR·바이럴 설계</span>
+                <span class="road-skill-tag final">마케팅 조직 설계</span>
+                <span class="road-skill-tag final">브랜드 가이드라인</span>
+              </div>
+            </div>
+            <div class="road-col">
+              <div class="road-col-title">성장 지표 (KPI)</div>
+              <div class="road-col-body">
+                자연 유입 비중 <span style="color:var(--accent3);font-family:'DM Mono',monospace">≥ 40%</span><br>
+                브랜드 검색량 <span style="color:var(--accent3);font-family:'DM Mono',monospace">월 1,000↑</span><br>
+                광고비 없는 콘텐츠 매출 <span style="color:var(--accent3);font-family:'DM Mono',monospace">≥ 20%</span><br>
+                팔로워·구독자 <span style="color:var(--accent3);font-family:'DM Mono',monospace">5,000↑</span><br>
+                광고 의존도 <span style="color:var(--accent3);font-family:'DM Mono',monospace">↓ 30% 감소</span>
+              </div>
+            </div>
+          </div>
+          <div style="background:rgba(255,209,102,0.05);border:1px solid rgba(255,209,102,0.15);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--accent3);margin-bottom:10px;letter-spacing:0.06em">BRAND BUILDER가 반드시 답해야 할 3가지 질문</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:12px;color:rgba(200,200,220,0.85);padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:6px">
+                <span style="color:var(--accent3);font-family:'DM Mono',monospace;font-size:11px">WHY —</span> 광고를 끊어도 고객이 이 브랜드를 찾을 이유가 있는가?
+              </div>
+              <div style="font-size:12px;color:rgba(200,200,220,0.85);padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:6px">
+                <span style="color:var(--accent3);font-family:'DM Mono',monospace;font-size:11px">WHO —</span> 우리 브랜드의 가장 열성적인 팬 100명은 누구이고, 무엇에 열광하는가?
+              </div>
+              <div style="font-size:12px;color:rgba(200,200,220,0.85);padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:6px">
+                <span style="color:var(--accent3);font-family:'DM Mono',monospace;font-size:11px">HOW —</span> 광고비 0원으로 다음 달 매출의 20%를 만들 수 있는가?
+              </div>
+            </div>
+          </div>
+          <div class="road-quest" style="border-color:rgba(255,209,102,0.4);background:rgba(255,209,102,0.07);">
+            <div class="road-quest-label" style="color:var(--accent3)">🏆 최종 퀘스트</div>
+            <div class="road-quest-text">광고 집행 없이 콘텐츠·커뮤니티·바이럴만으로 월 매출의 20% 이상 달성하기 — 브랜드 자산이 스스로 매출을 만드는 구조 완성</div>
+          </div>
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-muted);margin:14px 0 8px;letter-spacing:0.06em">UNLOCK CHECKLIST — 최종 전직 완성 조건</div>
+          <div class="road-unlock-check">
+            <label class="road-check-row"><input type="checkbox" id="q3a" onchange="updateUnlock()"><span>브랜드 전략 문서 완성 — 포지셔닝·톤앤매너·타겟 페르소나·브랜드 약속 포함</span></label>
+            <label class="road-check-row"><input type="checkbox" id="q3b" onchange="updateUnlock()"><span>광고 없이 유입된 자연 검색·SNS·추천 트래픽이 전체 유입의 40% 이상 달성</span></label>
+            <label class="road-check-row"><input type="checkbox" id="q3c" onchange="updateUnlock()"><span>팔로워·뉴스레터 구독자 등 브랜드 자체 채널 보유 (광고 플랫폼 외)</span></label>
+            <label class="road-check-row"><input type="checkbox" id="q3d" onchange="updateUnlock()"><span>콘텐츠 1개가 광고 없이 1만 이상 도달한 바이럴 경험 1회 이상</span></label>
+            <label class="road-check-row"><input type="checkbox" id="q3e" onchange="updateUnlock()"><span>마케팅 전략 보고서를 경영진에게 직접 발표하고 예산 승인 경험</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 면담 메모 -->
+    <div class="card">
+      <div class="card-title">팀장 면담 메모</div>
+      <p class="notice" style="margin-bottom:14px">면담 중 논의한 내용·액션 아이템을 기록해두세요.</p>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="input-group">
+          <label class="input-label">현재 단계 자가 진단 (Stage 1~3 중 어디?)</label>
+          <select id="selfStage">
+            <option value="">선택</option>
+            <option value="1">Stage 1 — Channel Expert 진행 중</option>
+            <option value="1.5">Stage 1~2 — 전환 중</option>
+            <option value="2">Stage 2 — Growth Marketer 진행 중</option>
+            <option value="2.5">Stage 2~3 — 전환 중</option>
+            <option value="3">Stage 3 — Brand Builder 진행 중</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label class="input-label">다음 단계로 가기 위해 지금 당장 할 수 있는 것 (1가지)</label>
+          <input type="text" id="nextAction" placeholder="예) 이번 달 캠페인 CAC·LTV 직접 계산해보기">
+        </div>
+        <div class="input-group">
+          <label class="input-label">팀장과 합의한 단기 목표 (3개월)</label>
+          <textarea id="shortGoal" rows="3" placeholder="예) Q3까지 주요 프로모션 BEP 분석 보고서 작성 및 팀 공유"></textarea>
+        </div>
+        <div class="input-group">
+          <label class="input-label">팀장과 합의한 장기 목표 (1~2년)</label>
+          <textarea id="longGoal" rows="3" placeholder="예) 브랜드 자연 유입 40% 달성, 콘텐츠 마케팅 체계 구축"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="switchTab('sheet')">← 캐릭터 시트</button>
+      <button class="btn btn-primary" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── 데이터 ──
+const PASSIVES = [
+  { id:1,  name:'데이터 샤먼',      desc:'수치 속에서 고객의 심리 변화를 귀신같이 찾아냄',              stat:'INT' },
+  { id:2,  name:'밈 마법사',        desc:'유행하는 트렌드를 즉시 콘텐츠화하여 바이럴을 일으킴',        stat:'SEN' },
+  { id:3,  name:'지갑 열기 전문가', desc:'고객이 홀린 듯 결제하게 만드는 마법의 카피 구사',            stat:'STR' },
+  { id:4,  name:'마감의 수호신',    desc:'촉박한 일정에도 퀄리티 하락 없이 정시에 완수',               stat:'AGI' },
+  { id:5,  name:'공감의 빙의술사',  desc:'타겟 페르소나의 입장에서 소름 돋는 기획을 함',               stat:'SEN' },
+  { id:6,  name:'ROAS의 사냥꾼',    desc:'광고비 1원도 낭비하지 않는 극한의 효율 추구',                stat:'STR' },
+  { id:7,  name:'네트워킹의 허브',  desc:'부서 간 갈등을 해결하고 협력을 끌어내는 화술',               stat:'CHA' },
+  { id:8,  name:'AI 프롬프트 술사', desc:'AI를 도구처럼 다루어 업무 속도를 5배 높임',                  stat:'AGI' },
+  { id:9,  name:'손익의 수호자',    desc:'단순 성과를 넘어 실제 이익(Profit)을 계산함',                stat:'STR' },
+  { id:10, name:'멀티채널 마스터',  desc:'여러 매체를 동시에 운영하며 최적의 믹스를 찾음',             stat:'AGI' },
+  { id:11, name:'디테일 집착광',    desc:'오타, 1px 오차도 허용 않는 완벽한 결과물 산출',              stat:'STA' },
+  { id:12, name:'긍정의 오라',      desc:'실패한 캠페인에서도 배움을 찾아 팀 사기를 높임',             stat:'CHA' },
+  { id:13, name:'아이디어 화수분',  desc:'회의 때마다 쏟아지는 창의적인 기획의 원천',                  stat:'SEN' },
+  { id:14, name:'강철 멘탈',        desc:'연이은 성과 저조에도 흔들림 없이 개선안을 도출',             stat:'STA' },
+  { id:15, name:'비즈니스 설계자',  desc:'마케팅을 넘어 비즈니스 모델 전체의 판을 짬',                 stat:'STR' },
+];
+
+const STATS = [
+  {
+    key:'STR', name:'전략력', desc:'캠페인 방향성 및 기획력',
+    fullDesc:'마케팅 목표를 정의하고 채널·예산·타이밍을 설계하는 능력. "왜 이 캠페인인가"를 논리적으로 설계하는 힘.',
+    ex: {
+      action:'예) 시즌 캠페인 전략 수립 — 타겟 세그먼트 3개 정의 후 채널별 예산 배분 기획',
+      result:'예) 캠페인 ROAS 340% 달성, 전월 대비 매출 +28% 성장',
+      repeat:'예) 캠페인 기획 템플릿 문서화, 분기마다 동일 프레임 적용 중'
+    },
+    exEasy: {
+      action:'예) 팀장 캠페인 기획안을 보고 "이 부분은 이렇게 바꾸면 어떨까요?"라고 의견을 냈음',
+      result:'예) 팀장이 내 의견을 일부 반영해서 기획안이 수정됨',
+      repeat:'예) 기획안 볼 때마다 "왜 이 채널인가?"를 스스로 질문하는 습관 보유'
+    }
+  },
+  {
+    key:'AGI', name:'민첩도', desc:'실행 속도 및 트렌드 대응력',
+    fullDesc:'빠르게 실행하고 결과를 보며 즉시 수정하는 능력. 트렌드 변화나 성과 이상 신호에 즉각 대응하는 힘.',
+    ex: {
+      action:'예) 경쟁사 프로모션 발견 후 24시간 내 대응 캠페인 세팅 및 소재 제작',
+      result:'예) 대응 캠페인 CTR 4.2%, 경쟁사 대비 전환율 1.8배 달성',
+      repeat:'예) 긴급 대응 SOP 문서 보유, 팀 공유 후 3회 이상 반복 적용'
+    },
+    exEasy: {
+      action:'예) 광고 소재 성과가 갑자기 떨어졌을 때 팀장한테 바로 보고하고 대체 소재를 준비해달라고 요청',
+      result:'예) 빠른 보고로 팀장이 즉시 대응해서 성과 하락을 최소화',
+      repeat:'예) 숫자가 이상하면 30분 안에 보고하는 것을 내 기준으로 삼고 있음'
+    }
+  },
+  {
+    key:'SEN', name:'감각', desc:'트렌드·카피·크리에이티브 감도',
+    fullDesc:'소비자 감성과 시장 트렌드를 직관적으로 읽는 능력. 바이럴되는 콘텐츠와 안 되는 콘텐츠를 구분하는 눈.',
+    ex: {
+      action:'예) SNS 트렌드 분석 후 밈 활용 콘텐츠 기획, 카피라이팅 직접 작성',
+      result:'예) 해당 콘텐츠 도달 32만, 저장 수 1,200회, 브랜드 팔로워 +800명',
+      repeat:'예) 주간 트렌드 리포트 작성 루틴 보유, 콘텐츠 칼렌더에 반영 중'
+    },
+    exEasy: {
+      action:'예) 요즘 SNS에서 자주 보이는 밈이나 포맷을 스크린샷 찍어서 팀 채널에 공유',
+      result:'예) 팀장이 그 포맷을 참고해서 다음 콘텐츠 방향에 반영함',
+      repeat:'예) 매일 SNS 피드를 볼 때 저장 버튼 많이 눌린 콘텐츠 형태를 메모하는 습관 보유'
+    }
+  },
+  {
+    key:'INT', name:'분석력', desc:'데이터 독해 및 인사이트 도출력',
+    fullDesc:'GA4·광고 대시보드·리뷰 데이터를 읽고 의사결정에 연결하는 능력. 숫자에서 액션 아이템을 뽑아내는 힘.',
+    ex: {
+      action:'예) GA4 퍼널 분석으로 장바구니 이탈 구간 특정, 개선 A/B 테스트 설계',
+      result:'예) 결제 전환율 2.1% → 3.4%로 개선, 월 매출 +1,200만원 기여',
+      repeat:'예) 주간 성과 리뷰 대시보드 구축, 매주 월요일 팀 공유 루틴 운영 중'
+    },
+    exEasy: {
+      action:'예) 팀장이 공유한 리포트에서 숫자가 낮은 부분을 발견하고 "이게 왜 낮은 것 같냐"고 여쭤봄',
+      result:'예) 팀장이 설명해줬고 그 내용을 메모해서 다음 번엔 스스로 판단 가능해짐',
+      repeat:'예) 매주 성과 보고서 받으면 가장 낮은 지표 하나는 꼭 이유를 찾아보는 습관 보유'
+    }
+  },
+  {
+    key:'CHA', name:'영향력', desc:'설득·협업·유관부서 조율 능력',
+    fullDesc:'경영진 보고, 유관부서 협업, 외부 파트너 협상을 이끄는 능력. 데이터로 설득하고 팀을 움직이는 힘.',
+    ex: {
+      action:'예) 예산 증액 제안서 직접 작성, 데이터 기반으로 경영진 설득',
+      result:'예) 마케팅 예산 30% 증액 승인, 이후 분기 매출 목표 초과 달성',
+      repeat:'예) 예산 제안 프레임워크 문서화, 반기마다 동일 구조로 보고 중'
+    },
+    exEasy: {
+      action:'예) 협력 업체에 "이 작업 일정을 3일 앞당길 수 있냐"고 이메일로 직접 요청',
+      result:'예) 업체가 수락해서 캠페인 준비를 예정보다 빨리 완료',
+      repeat:'예) 외부 요청할 때 항상 이유를 같이 설명하면 수락률이 높다는 걸 경험으로 알고 있음'
+    }
+  },
+  {
+    key:'STA', name:'지속력', desc:'꼼꼼함·완주력·퀄리티 유지',
+    fullDesc:'반복적인 소재 제작·매체 운영·성과 보고를 높은 기준으로 완수하는 능력. 지치지 않고 퀄리티를 유지하는 힘.',
+    ex: {
+      action:'예) 월 60개 이상 광고 소재 제작·운영하며 크리에이티브 피로도 관리 체계 수립',
+      result:'예) 소재 교체 주기 최적화로 CTR 하락 없이 3개월 유지, CPC 18% 절감',
+      repeat:'예) 소재 수명 예측 모델 보유, 팀 전체 운영 기준으로 적용 중'
+    },
+    exEasy: {
+      action:'예) 팀장이 맡긴 광고 소재 10개를 마감 전날까지 빠짐없이 완성하고 체크리스트로 확인',
+      result:'예) 마감 당일 추가 수정 없이 바로 업로드 완료, 팀장 만족',
+      repeat:'예) 작업 시작 전 체크리스트 만들어 놓고 하나씩 지우는 방식으로 누락을 방지 중'
+    }
+  },
+];
+
+const LEVEL_DEFS = [
+  { lv:0, label:'Lv.0', desc:'학습 중', short:'학습중' },
+  { lv:1, label:'Lv.1', desc:'단순히 이해한 수준', short:'이해' },
+  { lv:2, label:'Lv.2', desc:'내가 직접 활용 가능한 수준', short:'활용가능' },
+  { lv:3, label:'Lv.3', desc:'직접 활용해본 경험치를 가진 수준', short:'경험보유' },
+  { lv:4, label:'Lv.4', desc:'직접 활용해서 좋은 성과까지 낸 수준', short:'성과창출' },
+  { lv:5, label:'Lv.5', desc:'타인에게 교육해서 성과를 만들 수 있는 수준', short:'교육가능' },
+];
+
+const SKILLS = [
+  { id:'s1', name:'AI 마케팅 활용', desc:'ChatGPT·Claude 프롬프트 설계, AI 이미지·영상 생성 툴 활용',
+    levels:['AI 툴이 뭔지 알고 써본 적 있음','팀장이 알려준 프롬프트로 콘텐츠를 생성할 수 있음','스스로 프롬프트를 짜서 카피·이미지·분석 결과를 뽑아본 경험 있음','AI로 만든 결과물이 실제 캠페인에 활용된 경험 보유','AI 활용으로 업무 시간을 절반 이상 단축한 성과 보유','AI 활용 프롬프트 가이드를 만들어 팀원에게 교육'] },
+  { id:'s2', name:'수익 구조 분석', desc:'LTV·CAC 계산, 프로모션별 BEP 분석, 이익률 최적화',
+    levels:['LTV·CAC·BEP 개념을 알고 있음','팀장이 만든 계산 시트를 수정할 수 있음','직접 CAC·LTV를 계산하고 캠페인 수익성을 판단해본 경험 있음','프로모션 시나리오별 BEP를 직접 분석하고 의사결정에 활용','수익 구조 분석으로 캠페인 방향을 바꾼 의사결정 경험 보유','수익 분석 템플릿을 만들어 팀 전체에 적용·교육'] },
+  { id:'s3', name:'프로모션 기획', desc:'시즌별·이벤트별 미끼 상품 설계 및 구매 전환 시나리오 구축',
+    levels:['프로모션 기획이 무엇인지 알고 있음','기존 프로모션 자료를 보고 유사한 형태로 초안 작성 가능','시즌 프로모션 기획안을 직접 작성해본 경험 있음','미끼 상품 설계·전환 시나리오를 스스로 기획하고 실행','기획한 프로모션이 목표 ROAS 이상 달성한 성과 보유','프로모션 기획 프레임워크를 만들어 팀원에게 교육'] },
+  { id:'s4', name:'매체 운영 & 최적화', desc:'FB/IG·네이버(GFA/검색)·카카오 등 매체별 세팅 및 최적화',
+    levels:['주요 광고 플랫폼이 뭔지 알고 있음','팀장 지시에 따라 광고 소재를 업로드하고 기본 세팅 가능','단독으로 광고 캠페인을 세팅하고 운영해본 경험 있음','타겟·입찰·소재를 최적화해서 목표 ROAS를 달성','매체 최적화로 CPC를 낮추거나 ROAS를 높인 수치 성과 보유','매체별 운영 매뉴얼을 만들어 팀원에게 교육'] },
+  { id:'s5', name:'데이터 시각화', desc:'GA4 데이터 추출, 대시보드 구축 및 인사이트 도출',
+    levels:['GA4가 뭔지 알고 기본 지표를 볼 수 있음','팀장이 만든 대시보드를 읽고 숫자를 파악할 수 있음','GA4에서 직접 데이터를 추출해서 보고서를 만들어본 경험 있음','대시보드를 스스로 구축하고 인사이트를 도출해 보고','데이터 분석으로 캠페인 방향을 바꾼 의사결정 경험 보유','데이터 분석 루틴과 대시보드를 팀 전체에 적용·교육'] },
+  { id:'s6', name:'콘텐츠 기획 & 제작', desc:'SNS·블로그·영상 콘텐츠 기획 및 카피라이팅',
+    levels:['콘텐츠 기획이 뭔지 알고 있음','기존 콘텐츠를 참고해서 비슷한 형태로 초안 작성 가능','SNS 포스팅·카피를 스스로 기획하고 발행해본 경험 있음','콘텐츠 기획-제작-발행-성과 분석까지 스스로 운영','기획한 콘텐츠가 도달·저장·전환 등 성과를 낸 사례 보유','콘텐츠 기획 가이드라인을 만들어 팀원에게 교육'] },
+  { id:'s7', name:'CRM & 이메일 마케팅', desc:'고객 세그먼트 설계, 자동화 플로우 구축, 리텐션 관리',
+    levels:['CRM·이메일 마케팅 개념을 알고 있음','기존 이메일 템플릿을 수정해서 발송 가능','고객 세그먼트를 나누고 맞춤 메시지를 설계해본 경험 있음','자동화 플로우를 직접 구축하고 리텐션 지표를 관리','CRM 캠페인으로 재구매율을 높인 수치 성과 보유','CRM 운영 체계를 설계하고 팀원에게 교육'] },
+  { id:'s8', name:'브랜드 캠페인 기획', desc:'브랜드 인지도 제고를 위한 통합 캠페인 전략 수립',
+    levels:['브랜드 캠페인이 퍼포먼스 마케팅과 어떻게 다른지 알고 있음','기존 캠페인 기획안을 읽고 이해할 수 있음','브랜드 캠페인 기획안 초안을 직접 작성해본 경험 있음','캠페인 컨셉-채널-KPI까지 직접 기획하고 실행','기획한 캠페인이 브랜드 인지도·팔로워 등 성과로 연결된 경험 보유','캠페인 기획 프레임워크를 만들어 팀원에게 교육'] },
+];
+
+// ── 상태 ──
+let selectedPassives = [];
+let statValues = { STR:0, AGI:0, SEN:0, INT:0, CHA:0, STA:0 };
+let statEvidence = { STR:{action:'',result:'',repeat:''}, AGI:{action:'',result:'',repeat:''}, SEN:{action:'',result:'',repeat:''}, INT:{action:'',result:'',repeat:''}, CHA:{action:'',result:'',repeat:''}, STA:{action:'',result:'',repeat:''} };
+let skillLevels = {};
+let completedTabs = new Set();
+
+// ── 초기화 ──
+function init() {
+  renderPassives();
+  renderStats();
+  renderSkills();
+}
+
+function renderPassives() {
+  const grid = document.getElementById('passiveGrid');
+  grid.innerHTML = PASSIVES.map(p => `
+    <div class="passive-item ${selectedPassives.includes(p.id)?'selected':''}" id="passive-${p.id}" onclick="togglePassive(${p.id})">
+      <div class="passive-check"></div>
+      <div class="passive-name">
+        ${p.name}
+        <small>${p.desc}</small>
+      </div>
+      <div class="stat-badge stat-${p.stat}">${p.stat}</div>
+    </div>
+  `).join('');
+}
+
+function togglePassive(id) {
+  if (selectedPassives.includes(id)) {
+    selectedPassives = selectedPassives.filter(x => x !== id);
+  } else {
+    if (selectedPassives.length >= 2) {
+      const removed = selectedPassives.shift();
+      document.getElementById('passive-' + removed)?.classList.remove('selected');
+    }
+    selectedPassives.push(id);
+  }
+  renderPassives();
+  updateProgress();
+}
+
+function renderStats() {
+  const grid = document.getElementById('statsGrid');
+  grid.innerHTML = STATS.map(s => `
+    <div style="margin-bottom:4px">
+      <div class="stat-row">
+        <div class="stat-name">
+          <span class="stat-name-en stat-color-${s.key}">${s.key}</span>
+          <span class="stat-name-kr">${s.name}</span>
+        </div>
+        <div class="stat-segments" id="segs-${s.key}">
+          ${Array.from({length:10},(_,i)=>`
+            <div class="stat-seg" id="seg-${s.key}-${i+1}"
+              onclick="setStat('${s.key}',${i+1})"
+              style="background:${i < statValues[s.key] ? `var(--${s.key.toLowerCase()},#7864ff)` : 'var(--bg3)'}"
+            ></div>
+          `).join('')}
+        </div>
+        <div class="stat-value stat-color-${s.key}" id="val-${s.key}">${statValues[s.key]}</div>
+      </div>
+      <div style="padding:0 0 10px 96px;font-size:12px;color:rgba(200,200,220,0.75);font-weight:400;line-height:1.6">${s.fullDesc}</div>
+      <div class="evidence-box ${statValues[s.key]>0?'open':''}" id="ev-${s.key}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap">
+          <div style="font-size:11px;color:var(--text-muted);font-family:'DM Mono',monospace;">${s.key} · ${s.name} — 증거 입력 (행동-결과-재현성)</div>
+          <button onclick="toggleEasyEx('${s.key}')" id="easy-btn-${s.key}" style="font-size:10px;padding:3px 10px;border-radius:20px;border:1px solid rgba(120,100,255,0.3);background:rgba(120,100,255,0.08);color:var(--accent);cursor:pointer;font-family:'Noto Sans KR',sans-serif;white-space:nowrap">💡 쉬운 예시 보기</button>
+        </div>
+        <div id="easy-ex-${s.key}" style="display:none;background:rgba(120,100,255,0.06);border:1px solid rgba(120,100,255,0.15);border-radius:8px;padding:12px;margin-bottom:12px;font-size:12px;line-height:1.7;color:rgba(200,200,220,0.85)">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:8px">💡 이런 식으로 써도 돼요 (저연차 예시)</div>
+          <div style="margin-bottom:6px"><span style="color:var(--accent);font-size:10px;font-family:'DM Mono',monospace">행동</span> ${s.exEasy.action}</div>
+          <div style="margin-bottom:6px"><span style="color:var(--accent4);font-size:10px;font-family:'DM Mono',monospace">결과</span> ${s.exEasy.result}</div>
+          <div><span style="color:var(--accent3);font-size:10px;font-family:'DM Mono',monospace">재현</span> ${s.exEasy.repeat}</div>
+        </div>
+        <div class="evidence-row">
+          <span class="evidence-tag">행동</span>
+          <textarea placeholder="${s.ex.action}" rows="2" onchange="setEvidence('${s.key}','action',this.value)">${statEvidence[s.key].action}</textarea>
+        </div>
+        <div class="evidence-row">
+          <span class="evidence-tag">결과</span>
+          <textarea placeholder="${s.ex.result}" rows="2" onchange="setEvidence('${s.key}','result',this.value)">${statEvidence[s.key].result}</textarea>
+        </div>
+        <div class="evidence-row">
+          <span class="evidence-tag">재현성</span>
+          <textarea placeholder="${s.ex.repeat}" rows="2" onchange="setEvidence('${s.key}','repeat',this.value)">${statEvidence[s.key].repeat}</textarea>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleEasyEx(key) {
+  const box = document.getElementById(`easy-ex-${key}`);
+  const btn = document.getElementById(`easy-btn-${key}`);
+  const isOpen = box.style.display === 'block';
+  box.style.display = isOpen ? 'none' : 'block';
+  btn.textContent = isOpen ? '💡 쉬운 예시 보기' : '💡 쉬운 예시 닫기';
+}
+
+function setStat(key, val) {
+  statValues[key] = val;
+  // 세그먼트 색상 업데이트
+  for (let i = 1; i <= 10; i++) {
+    const seg = document.getElementById(`seg-${key}-${i}`);
+    if (seg) {
+      const colors = {STR:'#ff6b6b',AGI:'#4ecdc4',SEN:'#ffd166',INT:'#7864ff',CHA:'#ff9f43',STA:'#06d6a0'};
+      seg.style.background = i <= val ? colors[key] : 'var(--bg3)';
+    }
+  }
+  document.getElementById(`val-${key}`).textContent = val;
+  const ev = document.getElementById(`ev-${key}`);
+  if (ev) { ev.classList.toggle('open', val > 0); }
+  updateProgress();
+}
+
+function setEvidence(key, field, val) {
+  statEvidence[key][field] = val;
+}
+
+function renderSkills() {
+  const list = document.getElementById('skillList');
+  const lvColors = ['#3a3a50','#4a6fa5','#2ecc71','#f39c12','#e74c3c','#9b59b6'];
+  list.innerHTML = SKILLS.map(s => {
+    const cur = skillLevels[s.id] ?? -1;
+    return `
+    <div class="skill-item">
+      <div class="skill-header">
+        <div>
+          <div class="skill-name">${s.name}</div>
+          <div class="skill-desc">${s.desc}</div>
+        </div>
+      </div>
+      <div class="level-selector">
+        ${LEVEL_DEFS.map(l => `
+          <button class="level-btn lv${l.lv} ${cur===l.lv?'active':''}" onclick="setSkillLevel('${s.id}', ${l.lv}, this)">
+            Lv.${l.lv} ${l.short}
+          </button>
+        `).join('')}
+      </div>
+      ${cur >= 0 ? `
+      <div style="margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.03);border-left:3px solid ${lvColors[cur]};border-radius:0 6px 6px 0;font-size:12px;color:rgba(200,200,220,0.85);line-height:1.6">
+        <span style="font-size:10px;font-family:'DM Mono',monospace;color:${lvColors[cur]};margin-right:8px">Lv.${cur} 기준</span>${s.levels[cur]}
+      </div>` : ''}
+    </div>
+  `}).join('');
+}
+
+function setSkillLevel(id, lv, btn) {
+  skillLevels[id] = lv;
+  const parent = btn.closest('.skill-item');
+  parent.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // 레벨 기준 텍스트 업데이트
+  const skill = SKILLS.find(s => s.id === id);
+  const lvColors = ['#3a3a50','#4a6fa5','#2ecc71','#f39c12','#e74c3c','#9b59b6'];
+  let lvBox = parent.querySelector('.lv-criteria-box');
+  if (!lvBox) {
+    lvBox = document.createElement('div');
+    lvBox.className = 'lv-criteria-box';
+    parent.appendChild(lvBox);
+  }
+  lvBox.style.cssText = `margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.03);border-left:3px solid ${lvColors[lv]};border-radius:0 6px 6px 0;font-size:12px;color:rgba(200,200,220,0.85);line-height:1.6`;
+  lvBox.innerHTML = `<span style="font-size:10px;font-family:'DM Mono',monospace;color:${lvColors[lv]};margin-right:8px">Lv.${lv} 기준</span>${skill?.levels?.[lv] || ''}`;
+  updateProgress();
+}
+
+// ── 탭 전환 ──
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  const idx = ['basic','passive','stats','skills','sheet','roadmap'].indexOf(name);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+}
+
+// ── 로드맵 스테이지 토글 ──
+function toggleStage(id) {
+  const body = document.getElementById('body-' + id);
+  const stage = document.getElementById(id);
+  const chevron = stage.querySelector('.road-chevron');
+  const isOpen = body.classList.toggle('open');
+  chevron.style.transform = isOpen ? 'rotate(180deg)' : '';
+}
+
+// ── 퀘스트 체크 → 해금 상태 업데이트 ──
+function updateUnlock() {
+  const s1 = ['q1a','q1b','q1c'].every(id => document.getElementById(id)?.checked);
+  const s2 = ['q2a','q2b','q2c','q2d','q2e'].every(id => document.getElementById(id)?.checked);
+
+  const arrow1 = document.getElementById('unlock-txt1');
+  const arrow2 = document.getElementById('unlock-txt2');
+
+  if (s1) {
+    arrow1.textContent = '✅ Stage 1 퀘스트 완료 — Stage 2 해금!';
+    arrow1.style.color = 'var(--accent4)';
+  } else {
+    arrow1.textContent = '퀘스트 달성 시 다음 단계 해금 ↓';
+    arrow1.style.color = '';
+  }
+
+  if (s2) {
+    arrow2.textContent = '✅ Stage 2 퀘스트 완료 — 최종 전직 해금!';
+    arrow2.style.color = 'var(--accent3)';
+  } else {
+    arrow2.textContent = '퀘스트 달성 시 최종 전직 해금 ↓';
+    arrow2.style.color = '';
+  }
+}
+
+// ── 진행도 ──
+function updateProgress() {
+  let done = 0;
+  const info = document.getElementById('playerName')?.value?.trim();
+  if (info) done++;
+  if (selectedPassives.length === 2) done++;
+  const filled = Object.values(statValues).filter(v => v > 0).length;
+  if (filled === 6) done++;
+  const skillsFilled = Object.keys(skillLevels).length;
+  if (skillsFilled === SKILLS.length) done++;
+
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('dot' + i);
+    if (dot) dot.classList.toggle('done', i < done);
+  }
+  document.getElementById('stepLabel').textContent = `${done} / 4 완료`;
+}
+
+// ── 캐릭터 시트 생성 ──
+function generateSheet() {
+  const name = document.getElementById('playerName').value || '이름 미입력';
+  const role = document.getElementById('playerRole').value || '-';
+  const year = document.getElementById('playerYear').value || '-';
+  const team = document.getElementById('playerTeam').value || '상품팀';
+  const job = document.getElementById('playerJob').value || '-';
+
+  const passiveData = PASSIVES.filter(p => selectedPassives.includes(p.id));
+
+  // 레이더 차트 SVG 생성
+  const radarSVG = buildRadarSVG();
+
+  // 스킬 테이블
+  const skillRows = SKILLS.map(s => {
+    const lv = skillLevels[s.id] ?? 0;
+    const ld = LEVEL_DEFS[lv];
+    const lvColors = ['var(--lv0)','var(--lv1)','var(--lv2)','var(--lv3)','var(--lv4)','var(--lv5)'];
+    return `
+      <tr>
+        <td style="padding:10px 0;">
+          <div style="font-weight:500;font-size:13px">${s.name}</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${s.desc}</div>
+        </td>
+        <td style="text-align:right;padding:10px 0;">
+          <span class="lv-pill lv-pill-${lv}">Lv.${lv} ${ld.short}</span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  // 하이라이트 스킬 (Lv.4+)
+  const highlightSkills = SKILLS.filter(s => (skillLevels[s.id]??0) >= 4);
+  const learnSkills = SKILLS.filter(s => (skillLevels[s.id]??0) <= 1);
+
+  const output = document.getElementById('sheetOutput');
+  output.innerHTML = `
+    <div class="character-sheet">
+      <div class="cs-header">
+        <div>
+          <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted);margin-bottom:6px">${team} · ${role} · ${year}</div>
+          <div class="cs-name">${name}</div>
+          <div class="cs-title">${job}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text-dim)">MARKETING TEAM CHARACTER SHEET</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">${new Date().toLocaleDateString('ko-KR')}</div>
+        </div>
+      </div>
+
+      <div class="cs-body">
+
+        <!-- 고유 특성 -->
+        <div class="cs-section">
+          <div class="cs-section-title">◆ Passive Skills · 고유 특성</div>
+          <div class="cs-passives">
+            ${passiveData.map(p=>`
+              <div class="cs-passive-tag">
+                [${p.name}]
+                <span style="font-size:10px;margin-left:6px;opacity:0.6">${p.stat}</span>
+              </div>
+            `).join('')}
+            ${passiveData.length===0?'<span style="color:var(--text-muted);font-size:12px">선택하지 않음</span>':''}
+          </div>
+          ${passiveData.map(p=>`
+            <div style="margin-top:10px;padding:10px 14px;background:var(--bg3);border-radius:8px;font-size:12px;color:var(--text-muted);line-height:1.6">
+              <strong style="color:var(--text)">[${p.name}]</strong> — ${p.desc}
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- 스탯 + 레이더 -->
+        <div class="cs-section">
+          <div class="cs-section-title">◆ Core Stats · 6대 핵심 스탯</div>
+          <div style="display:grid;grid-template-columns:1fr 200px;gap:20px;align-items:center">
+            <div>
+              <div class="cs-stats-mini" style="grid-template-columns:repeat(6,1fr)">
+                ${STATS.map(s=>`
+                  <div class="cs-stat-mini">
+                    <div class="cs-stat-mini-val stat-color-${s.key}">${statValues[s.key]}</div>
+                    <div class="cs-stat-mini-name">${s.key}</div>
+                    <div style="font-size:9px;color:var(--text-dim);margin-top:1px">${s.name}</div>
+                  </div>
+                `).join('')}
+              </div>
+              <!-- 증거 요약 -->
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+                ${STATS.filter(s=>statEvidence[s.key].action||statEvidence[s.key].result).map(s=>`
+                  <div style="padding:10px 12px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--${s.key.toLowerCase()},#7864ff)">
+                    <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted);margin-bottom:6px">${s.key} · ${s.name}</div>
+                    ${statEvidence[s.key].action?`<div style="font-size:12px;margin-bottom:3px"><span style="color:var(--accent);font-size:10px;font-family:'DM Mono',monospace;">행동</span> ${statEvidence[s.key].action}</div>`:''}
+                    ${statEvidence[s.key].result?`<div style="font-size:12px;margin-bottom:3px"><span style="color:var(--accent4);font-size:10px;font-family:'DM Mono',monospace;">결과</span> ${statEvidence[s.key].result}</div>`:''}
+                    ${statEvidence[s.key].repeat?`<div style="font-size:12px"><span style="color:var(--accent3);font-size:10px;font-family:'DM Mono',monospace;">재현</span> ${statEvidence[s.key].repeat}</div>`:''}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            <div>${radarSVG}</div>
+          </div>
+        </div>
+
+        <!-- 액티브 스킬 -->
+        <div class="cs-section">
+          <div class="cs-section-title">◆ Active Skills · 숙련도</div>
+          <table class="cs-skills-table">${skillRows}</table>
+        </div>
+
+        <!-- 강점 / 성장 포인트 -->
+        ${highlightSkills.length > 0 ? `
+        <div class="cs-section">
+          <div class="cs-section-title">◆ 강점 스킬 (Lv.4~5)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${highlightSkills.map(s=>`
+              <div style="padding:8px 14px;border-radius:8px;background:rgba(6,214,160,0.1);border:1px solid rgba(6,214,160,0.3);font-size:12px;color:var(--accent4)">⚡ ${s.name}</div>
+            `).join('')}
+          </div>
+        </div>` : ''}
+
+        ${learnSkills.length > 0 ? `
+        <div class="cs-section">
+          <div class="cs-section-title">◆ 성장 포인트 (Lv.0~1)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${learnSkills.map(s=>`
+              <div style="padding:8px 14px;border-radius:8px;background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.2);font-size:12px;color:var(--accent3)">↑ ${s.name}</div>
+            `).join('')}
+          </div>
+        </div>` : ''}
+
+        <!-- 성장 경로 -->
+        <div class="cs-section">
+          <div class="cs-section-title">◆ Skill Tree · 성장 경로</div>
+          <div class="skill-tree">
+            <div class="tree-node">
+              <div class="tree-line">
+                <div class="tree-dot current">●</div>
+                <div class="tree-connector"></div>
+              </div>
+              <div class="tree-content">
+                <div class="tree-title" style="color:var(--accent)">Channel Expert</div>
+                <div class="tree-sub">채널을 장악하고 재현 가능한 성과를 만드는 실행 전문가 · 현재 전문성을 극대화하는 단계</div>
+                <div class="tree-tags">
+                  <span class="tree-tag">매체 운영</span>
+                  <span class="tree-tag">소재 최적화</span>
+                  <span class="tree-tag">성과 분석</span>
+                  <span class="tree-tag">ROAS 관리</span>
+                </div>
+              </div>
+            </div>
+            <div class="tree-node">
+              <div class="tree-line">
+                <div class="tree-dot future">◎</div>
+              </div>
+              <div class="tree-content">
+                <div class="tree-title" style="color:var(--accent3)">Brand Founder</div>
+                <div class="tree-sub">나만의 철학과 팬덤을 가진 독립 브랜드 창조자 · Channel Expert 역량을 기반으로 자체 마케팅 세계관을 구축</div>
+                <div class="tree-tags">
+                  <span class="tree-tag">브랜드 캠페인</span>
+                  <span class="tree-tag">팬덤 마케팅</span>
+                  <span class="tree-tag">그로스 해킹</span>
+                  <span class="tree-tag">독립 브랜드</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  completedTabs.add('sheet');
+  switchTab('sheet');
+  updateProgress();
+}
+
+function buildRadarSVG() {
+  const keys = ['STR','AGI','SEN','INT','CHA','STA'];
+  const vals = keys.map(k => statValues[k] / 10);
+  const cx = 95, cy = 95, r = 72;
+  const angles = keys.map((_, i) => (Math.PI * 2 * i / 6) - Math.PI / 2);
+  const colors = {STR:'#ff6b6b',AGI:'#4ecdc4',SEN:'#ffd166',INT:'#7864ff',CHA:'#ff9f43',STA:'#06d6a0'};
+
+  // 배경 육각형 (5단계)
+  const bgHexes = [1, 0.8, 0.6, 0.4, 0.2].map(scale => {
+    const pts = angles.map(a => `${cx + r * scale * Math.cos(a)},${cy + r * scale * Math.sin(a)}`).join(' ');
+    return `<polygon points="${pts}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>`;
+  }).join('');
+
+  // 축선
+  const axes = angles.map(a =>
+    `<line x1="${cx}" y1="${cy}" x2="${cx + r * Math.cos(a)}" y2="${cy + r * Math.sin(a)}" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>`
+  ).join('');
+
+  // 데이터 폴리곤
+  const dataPts = vals.map((v, i) => {
+    const a = angles[i];
+    return `${cx + r * v * Math.cos(a)},${cy + r * v * Math.sin(a)}`;
+  }).join(' ');
+
+  // 레이블
+  const labels = keys.map((k, i) => {
+    const a = angles[i];
+    const lx = cx + (r + 16) * Math.cos(a);
+    const ly = cy + (r + 16) * Math.sin(a);
+    return `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="'DM Mono',monospace" fill="${colors[k]}" font-weight="500">${k}</text>`;
+  }).join('');
+
+  return `
+    <svg width="190" height="190" viewBox="0 0 190 190">
+      ${bgHexes}
+      ${axes}
+      <polygon points="${dataPts}" fill="rgba(120,100,255,0.15)" stroke="#7864ff" stroke-width="1.5"/>
+      ${vals.map((v,i) => {
+        const a = angles[i];
+        return `<circle cx="${cx + r * v * Math.cos(a)}" cy="${cy + r * v * Math.sin(a)}" r="3" fill="${colors[keys[i]]}"/>`;
+      }).join('')}
+      ${labels}
+    </svg>
+  `;
+}
+
+// ── 실행 ──
+init();
+document.getElementById('playerName').addEventListener('input', updateProgress);
+</script>
+</body>
+</html>
