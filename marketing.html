@@ -7,31 +7,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0f;
-    --bg2: #12121a;
-    --bg3: #1a1a26;
-    --border: rgba(255,255,255,0.07);
+    --bg: #f6f5f1;
+    --bg2: #ffffff;
+    --bg3: #f2f1f7;
+    --border: rgba(66,52,92,0.07);
     --border-active: rgba(120,100,255,0.4);
-    --text: #e8e8f0;
-    --text-muted: #6b6b80;
-    --text-dim: #3a3a50;
-    --accent: #7864ff;
-    --accent2: #ff6b6b;
-    --accent3: #ffd166;
-    --accent4: #06d6a0;
-    --accent5: #4ecdc4;
-    --str: #ff6b6b;
-    --agi: #4ecdc4;
-    --sen: #ffd166;
-    --int: #7864ff;
-    --cha: #ff9f43;
-    --sta: #06d6a0;
-    --lv0: #3a3a50;
+    --text: #282638;
+    --text-muted: #686477;
+    --text-dim: #736d83;
+    --accent: #6850c9;
+    --accent2: #bd4151;
+    --accent3: #8c6009;
+    --accent4: #087d63;
+    --accent5: #147b80;
+    --str: #bd4151;
+    --agi: #147b80;
+    --sen: #8c6009;
+    --int: #6850c9;
+    --cha: #a65d16;
+    --sta: #087d63;
+    --lv0: #736d83;
     --lv1: #4a6fa5;
-    --lv2: #2ecc71;
-    --lv3: #f39c12;
-    --lv4: #e74c3c;
-    --lv5: #9b59b6;
+    --lv2: #187749;
+    --lv3: #976009;
+    --lv4: #b93f36;
+    --lv5: #8143a0;
     --radius: 12px;
     --radius-sm: 8px;
   }
@@ -165,7 +165,7 @@
     transition: border-color 0.2s;
   }
 
-  .card:hover { border-color: rgba(255,255,255,0.12); }
+  .card:hover { border-color: rgba(66,52,92,0.12); }
 
   .card-title {
     font-size: 11px;
@@ -253,8 +253,8 @@
   }
 
   .passive-item:hover {
-    border-color: rgba(255,255,255,0.15);
-    background: rgba(255,255,255,0.04);
+    border-color: rgba(66,52,92,0.15);
+    background: rgba(66,52,92,0.04);
   }
 
   .passive-item.selected {
@@ -308,7 +308,7 @@
   .passive-name small {
     display: block;
     font-size: 12px;
-    color: rgba(200, 200, 220, 0.75);
+    color: var(--text-muted);
     font-weight: 400;
     margin-top: 4px;
     line-height: 1.5;
@@ -459,7 +459,7 @@
     transition: border-color 0.2s;
   }
 
-  .skill-item:hover { border-color: rgba(255,255,255,0.12); }
+  .skill-item:hover { border-color: rgba(66,52,92,0.12); }
 
   .skill-header {
     display: flex;
@@ -502,10 +502,10 @@
     white-space: nowrap;
   }
 
-  .level-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+  .level-btn:hover { border-color: rgba(66,52,92,0.2); color: var(--text); }
 
   .level-btn.lv0.active { background: rgba(58,58,80,0.8); border-color: var(--lv0); color: #aaa; }
-  .level-btn.lv1.active { background: rgba(74,111,165,0.3); border-color: var(--lv1); color: #6fa3d8; }
+  .level-btn.lv1.active { background: rgba(74,111,165,0.3); border-color: var(--lv1); color: #355f8d; }
   .level-btn.lv2.active { background: rgba(46,204,113,0.2); border-color: var(--lv2); color: var(--lv2); }
   .level-btn.lv3.active { background: rgba(243,156,18,0.2); border-color: var(--lv3); color: var(--lv3); }
   .level-btn.lv4.active { background: rgba(231,76,60,0.2); border-color: var(--lv4); color: var(--lv4); }
@@ -528,12 +528,12 @@
     gap: 8px;
     padding: 8px;
     border-radius: 6px;
-    background: rgba(255,255,255,0.02);
+    background: rgba(66,52,92,0.02);
     cursor: pointer;
     transition: background 0.15s;
   }
 
-  .level-def:hover { background: rgba(255,255,255,0.05); }
+  .level-def:hover { background: rgba(66,52,92,0.05); }
 
   .level-dot {
     width: 8px;
@@ -769,7 +769,7 @@
   }
 
   .lv-pill-0 { background: rgba(58,58,80,0.8); color: #888; }
-  .lv-pill-1 { background: rgba(74,111,165,0.3); color: #6fa3d8; }
+  .lv-pill-1 { background: rgba(74,111,165,0.3); color: #355f8d; }
   .lv-pill-2 { background: rgba(46,204,113,0.2); color: var(--lv2); }
   .lv-pill-3 { background: rgba(243,156,18,0.2); color: var(--lv3); }
   .lv-pill-4 { background: rgba(231,76,60,0.2); color: var(--lv4); }
@@ -816,8 +816,8 @@
   }
 
   .btn-secondary:hover {
-    border-color: rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.06);
+    border-color: rgba(66,52,92,0.2);
+    background: rgba(66,52,92,0.06);
   }
 
   .btn-row {
@@ -866,7 +866,7 @@
     transition: border-color 0.2s;
   }
 
-  .road-stage:hover { border-color: rgba(255,255,255,0.12); }
+  .road-stage:hover { border-color: rgba(66,52,92,0.12); }
 
   .road-stage-header {
     display: flex;
@@ -915,7 +915,7 @@
 
   .road-stage-sub {
     font-size: 12px;
-    color: rgba(200,200,220,0.7);
+    color: var(--text-muted);
     font-weight: 400;
     margin-top: 3px;
     line-height: 1.5;
@@ -952,7 +952,7 @@
   .road-metaphor {
     font-size: 12px;
     font-style: italic;
-    color: rgba(200,200,220,0.65);
+    color: var(--text-muted);
     padding: 12px 14px;
     border-left: 3px solid rgba(120,100,255,0.4);
     background: rgba(120,100,255,0.05);
@@ -969,7 +969,7 @@
   }
 
   .road-col {
-    background: rgba(255,255,255,0.03);
+    background: rgba(66,52,92,0.03);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 12px;
@@ -986,7 +986,7 @@
 
   .road-col-body {
     font-size: 12px;
-    color: rgba(200,200,220,0.8);
+    color: var(--text-muted);
     line-height: 1.6;
   }
 
@@ -1002,7 +1002,7 @@
     border-radius: 20px;
     border: 1px solid var(--border);
     color: var(--text-muted);
-    background: rgba(255,255,255,0.03);
+    background: rgba(66,52,92,0.03);
   }
 
   .road-skill-tag.unlock {
@@ -1036,7 +1036,7 @@
 
   .road-quest-text {
     font-size: 12px;
-    color: rgba(200,200,220,0.85);
+    color: var(--text-muted);
     line-height: 1.6;
   }
 
@@ -1052,7 +1052,7 @@
     gap: 10px;
     cursor: pointer;
     font-size: 12px;
-    color: rgba(200,200,220,0.75);
+    color: var(--text-muted);
     line-height: 1.5;
     padding: 6px 10px;
     border-radius: 6px;
@@ -1060,7 +1060,7 @@
     transition: all 0.15s;
   }
 
-  .road-check-row:hover { background: rgba(255,255,255,0.03); border-color: var(--border); }
+  .road-check-row:hover { background: rgba(66,52,92,0.03); border-color: var(--border); }
 
   .road-check-row input[type="checkbox"] {
     width: 15px;
@@ -1374,11 +1374,11 @@
           <div style="background:rgba(6,214,160,0.05);border:1px solid rgba(6,214,160,0.15);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
             <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--accent4);margin-bottom:10px;letter-spacing:0.06em">STAGE 1 → 2 핵심 전환점</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div style="font-size:12px;color:rgba(200,200,220,0.7)">
+              <div style="font-size:12px;color:var(--text-muted)">
                 <div style="color:var(--text-muted);font-size:10px;margin-bottom:4px">Stage 1에서 하던 것</div>
                 "ROAS·CTR 높이기"<br>"소재 테스트·최적화"<br>"매체별 예산 집행"
               </div>
-              <div style="font-size:12px;color:rgba(200,200,220,0.85)">
+              <div style="font-size:12px;color:var(--text-muted)">
                 <div style="color:var(--accent4);font-size:10px;margin-bottom:4px">Stage 2에서 추가되는 것</div>
                 "이 캠페인이 실제로 이익을 냈는가?"<br>"고객이 재구매하는 구조를 만들었는가?"<br>"전체 퍼널의 병목이 어디인가?"
               </div>
@@ -1453,13 +1453,13 @@
           <div style="background:rgba(255,209,102,0.05);border:1px solid rgba(255,209,102,0.15);border-radius:var(--radius-sm);padding:14px;margin-bottom:14px;">
             <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--accent3);margin-bottom:10px;letter-spacing:0.06em">BRAND BUILDER가 반드시 답해야 할 3가지 질문</div>
             <div style="display:flex;flex-direction:column;gap:8px">
-              <div style="font-size:12px;color:rgba(200,200,220,0.85);padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:6px">
+              <div style="font-size:12px;color:var(--text-muted);padding:8px 12px;background:rgba(66,52,92,0.03);border-radius:6px">
                 <span style="color:var(--accent3);font-family:'DM Mono',monospace;font-size:11px">WHY —</span> 광고를 끊어도 고객이 이 브랜드를 찾을 이유가 있는가?
               </div>
-              <div style="font-size:12px;color:rgba(200,200,220,0.85);padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:6px">
+              <div style="font-size:12px;color:var(--text-muted);padding:8px 12px;background:rgba(66,52,92,0.03);border-radius:6px">
                 <span style="color:var(--accent3);font-family:'DM Mono',monospace;font-size:11px">WHO —</span> 우리 브랜드의 가장 열성적인 팬 100명은 누구이고, 무엇에 열광하는가?
               </div>
-              <div style="font-size:12px;color:rgba(200,200,220,0.85);padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:6px">
+              <div style="font-size:12px;color:var(--text-muted);padding:8px 12px;background:rgba(66,52,92,0.03);border-radius:6px">
                 <span style="color:var(--accent3);font-family:'DM Mono',monospace;font-size:11px">HOW —</span> 광고비 0원으로 다음 달 매출의 20%를 만들 수 있는가?
               </div>
             </div>
@@ -1709,19 +1709,19 @@ function renderStats() {
           ${Array.from({length:10},(_,i)=>`
             <div class="stat-seg" id="seg-${s.key}-${i+1}"
               onclick="setStat('${s.key}',${i+1})"
-              style="background:${i < statValues[s.key] ? `var(--${s.key.toLowerCase()},#7864ff)` : 'var(--bg3)'}"
+              style="background:${i < statValues[s.key] ? `var(--${s.key.toLowerCase()},#6850c9)` : 'var(--bg3)'}"
             ></div>
           `).join('')}
         </div>
         <div class="stat-value stat-color-${s.key}" id="val-${s.key}">${statValues[s.key]}</div>
       </div>
-      <div style="padding:0 0 10px 96px;font-size:12px;color:rgba(200,200,220,0.75);font-weight:400;line-height:1.6">${s.fullDesc}</div>
+      <div style="padding:0 0 10px 96px;font-size:12px;color:var(--text-muted);font-weight:400;line-height:1.6">${s.fullDesc}</div>
       <div class="evidence-box ${statValues[s.key]>0?'open':''}" id="ev-${s.key}">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap">
           <div style="font-size:11px;color:var(--text-muted);font-family:'DM Mono',monospace;">${s.key} · ${s.name} — 증거 입력 (행동-결과-재현성)</div>
           <button onclick="toggleEasyEx('${s.key}')" id="easy-btn-${s.key}" style="font-size:10px;padding:3px 10px;border-radius:20px;border:1px solid rgba(120,100,255,0.3);background:rgba(120,100,255,0.08);color:var(--accent);cursor:pointer;font-family:'Noto Sans KR',sans-serif;white-space:nowrap">💡 쉬운 예시 보기</button>
         </div>
-        <div id="easy-ex-${s.key}" style="display:none;background:rgba(120,100,255,0.06);border:1px solid rgba(120,100,255,0.15);border-radius:8px;padding:12px;margin-bottom:12px;font-size:12px;line-height:1.7;color:rgba(200,200,220,0.85)">
+        <div id="easy-ex-${s.key}" style="display:none;background:rgba(120,100,255,0.06);border:1px solid rgba(120,100,255,0.15);border-radius:8px;padding:12px;margin-bottom:12px;font-size:12px;line-height:1.7;color:var(--text-muted)">
           <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:8px">💡 이런 식으로 써도 돼요 (저연차 예시)</div>
           <div style="margin-bottom:6px"><span style="color:var(--accent);font-size:10px;font-family:'DM Mono',monospace">행동</span> ${s.exEasy.action}</div>
           <div style="margin-bottom:6px"><span style="color:var(--accent4);font-size:10px;font-family:'DM Mono',monospace">결과</span> ${s.exEasy.result}</div>
@@ -1758,7 +1758,7 @@ function setStat(key, val) {
   for (let i = 1; i <= 10; i++) {
     const seg = document.getElementById(`seg-${key}-${i}`);
     if (seg) {
-      const colors = {STR:'#ff6b6b',AGI:'#4ecdc4',SEN:'#ffd166',INT:'#7864ff',CHA:'#ff9f43',STA:'#06d6a0'};
+      const colors = {STR:'#bd4151',AGI:'#147b80',SEN:'#8c6009',INT:'#6850c9',CHA:'#a65d16',STA:'#087d63'};
       seg.style.background = i <= val ? colors[key] : 'var(--bg3)';
     }
   }
@@ -1774,7 +1774,7 @@ function setEvidence(key, field, val) {
 
 function renderSkills() {
   const list = document.getElementById('skillList');
-  const lvColors = ['#3a3a50','#4a6fa5','#2ecc71','#f39c12','#e74c3c','#9b59b6'];
+  const lvColors = ['#736d83','#4a6fa5','#187749','#976009','#b93f36','#8143a0'];
   list.innerHTML = SKILLS.map(s => {
     const cur = skillLevels[s.id] ?? -1;
     return `
@@ -1793,7 +1793,7 @@ function renderSkills() {
         `).join('')}
       </div>
       ${cur >= 0 ? `
-      <div style="margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.03);border-left:3px solid ${lvColors[cur]};border-radius:0 6px 6px 0;font-size:12px;color:rgba(200,200,220,0.85);line-height:1.6">
+      <div style="margin-top:10px;padding:10px 14px;background:rgba(66,52,92,0.03);border-left:3px solid ${lvColors[cur]};border-radius:0 6px 6px 0;font-size:12px;color:var(--text-muted);line-height:1.6">
         <span style="font-size:10px;font-family:'DM Mono',monospace;color:${lvColors[cur]};margin-right:8px">Lv.${cur} 기준</span>${s.levels[cur]}
       </div>` : ''}
     </div>
@@ -1807,14 +1807,14 @@ function setSkillLevel(id, lv, btn) {
   btn.classList.add('active');
   // 레벨 기준 텍스트 업데이트
   const skill = SKILLS.find(s => s.id === id);
-  const lvColors = ['#3a3a50','#4a6fa5','#2ecc71','#f39c12','#e74c3c','#9b59b6'];
+  const lvColors = ['#736d83','#4a6fa5','#187749','#976009','#b93f36','#8143a0'];
   let lvBox = parent.querySelector('.lv-criteria-box');
   if (!lvBox) {
     lvBox = document.createElement('div');
     lvBox.className = 'lv-criteria-box';
     parent.appendChild(lvBox);
   }
-  lvBox.style.cssText = `margin-top:10px;padding:10px 14px;background:rgba(255,255,255,0.03);border-left:3px solid ${lvColors[lv]};border-radius:0 6px 6px 0;font-size:12px;color:rgba(200,200,220,0.85);line-height:1.6`;
+  lvBox.style.cssText = `margin-top:10px;padding:10px 14px;background:rgba(66,52,92,0.03);border-left:3px solid ${lvColors[lv]};border-radius:0 6px 6px 0;font-size:12px;color:var(--text-muted);line-height:1.6`;
   lvBox.innerHTML = `<span style="font-size:10px;font-family:'DM Mono',monospace;color:${lvColors[lv]};margin-right:8px">Lv.${lv} 기준</span>${skill?.levels?.[lv] || ''}`;
   updateProgress();
 }
@@ -1971,7 +1971,7 @@ function generateSheet() {
               <!-- 증거 요약 -->
               <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
                 ${STATS.filter(s=>statEvidence[s.key].action||statEvidence[s.key].result).map(s=>`
-                  <div style="padding:10px 12px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--${s.key.toLowerCase()},#7864ff)">
+                  <div style="padding:10px 12px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--${s.key.toLowerCase()},#6850c9)">
                     <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-muted);margin-bottom:6px">${s.key} · ${s.name}</div>
                     ${statEvidence[s.key].action?`<div style="font-size:12px;margin-bottom:3px"><span style="color:var(--accent);font-size:10px;font-family:'DM Mono',monospace;">행동</span> ${escapeSheetText(statEvidence[s.key].action)}</div>`:''}
                     ${statEvidence[s.key].result?`<div style="font-size:12px;margin-bottom:3px"><span style="color:var(--accent4);font-size:10px;font-family:'DM Mono',monospace;">결과</span> ${escapeSheetText(statEvidence[s.key].result)}</div>`:''}
@@ -2063,17 +2063,17 @@ function buildRadarSVG() {
   const vals = keys.map(k => statValues[k] / 10);
   const cx = 95, cy = 95, r = 72;
   const angles = keys.map((_, i) => (Math.PI * 2 * i / 6) - Math.PI / 2);
-  const colors = {STR:'#ff6b6b',AGI:'#4ecdc4',SEN:'#ffd166',INT:'#7864ff',CHA:'#ff9f43',STA:'#06d6a0'};
+  const colors = {STR:'#bd4151',AGI:'#147b80',SEN:'#8c6009',INT:'#6850c9',CHA:'#a65d16',STA:'#087d63'};
 
   // 배경 육각형 (5단계)
   const bgHexes = [1, 0.8, 0.6, 0.4, 0.2].map(scale => {
     const pts = angles.map(a => `${cx + r * scale * Math.cos(a)},${cy + r * scale * Math.sin(a)}`).join(' ');
-    return `<polygon points="${pts}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>`;
+    return `<polygon points="${pts}" fill="none" stroke="rgba(66,52,92,0.06)" stroke-width="0.5"/>`;
   }).join('');
 
   // 축선
   const axes = angles.map(a =>
-    `<line x1="${cx}" y1="${cy}" x2="${cx + r * Math.cos(a)}" y2="${cy + r * Math.sin(a)}" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>`
+    `<line x1="${cx}" y1="${cy}" x2="${cx + r * Math.cos(a)}" y2="${cy + r * Math.sin(a)}" stroke="rgba(66,52,92,0.06)" stroke-width="0.5"/>`
   ).join('');
 
   // 데이터 폴리곤
@@ -2094,7 +2094,7 @@ function buildRadarSVG() {
     <svg width="190" height="190" viewBox="0 0 190 190">
       ${bgHexes}
       ${axes}
-      <polygon points="${dataPts}" fill="rgba(120,100,255,0.15)" stroke="#7864ff" stroke-width="1.5"/>
+      <polygon points="${dataPts}" fill="rgba(120,100,255,0.15)" stroke="#6850c9" stroke-width="1.5"/>
       ${vals.map((v,i) => {
         const a = angles[i];
         return `<circle cx="${cx + r * v * Math.cos(a)}" cy="${cy + r * v * Math.sin(a)}" r="3" fill="${colors[keys[i]]}"/>`;
