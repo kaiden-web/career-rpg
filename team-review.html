@@ -342,8 +342,18 @@
     </div>
   </div>
 
+  <!-- 임시저장 복원 배너 -->
+  <div id="draft-banner" style="display:none; background:#2A2A4A; border:1px solid #6C63FF; border-radius:10px; padding:14px 18px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+    <span style="color:#B8B8D4; font-size:0.88rem;">💾 이전에 작성하던 내용이 있습니다.</span>
+    <div style="display:flex; gap:8px;">
+      <button onclick="loadDraft()" style="background:#6C63FF; color:#fff; border:none; border-radius:6px; padding:6px 14px; font-size:0.82rem; cursor:pointer;">불러오기</button>
+      <button onclick="dismissDraft()" style="background:transparent; color:#8888AA; border:1px solid #3A3A5C; border-radius:6px; padding:6px 14px; font-size:0.82rem; cursor:pointer;">무시</button>
+    </div>
+  </div>
+
   <!-- 제출 -->
   <div class="submit-area">
+    <button class="btn-draft" onclick="saveDraft()" style="background:transparent; color:#6C63FF; border:2px solid #6C63FF; border-radius:10px; padding:14px 28px; font-size:1rem; font-weight:600; cursor:pointer; transition:all 0.2s; margin-right:10px;">💾 임시저장</button>
     <button class="btn-submit" onclick="submitReview()">📤 Notion DB에 저장</button>
     <p class="submit-note">⚠️ 제출 후 수정 불가 · 팀장(앰버)만 Notion DB 접근 가능</p>
     <div id="status-msg" class="status-msg"></div>
@@ -488,44 +498,128 @@ function switchTab(name, el) {
 
 function collectData() {
   const data = {
-    'archive-member': document.getElementById('archive-member').value,
-    'archive-month': document.getElementById('archive-month').value,
-    'archive-author': document.getElementById('archive-author').value,
-    'archive-workload': document.getElementById('archive-workload').value,
-    'review-self-name': document.getElementById('review-self-name').value,
-    'review-self-strength': document.getElementById('review-self-strength').value,
-    'review-self-growth': document.getElementById('review-self-growth').value,
-    'review-lead-name': document.getElementById('review-lead-name').value,
-    'review-lead-strength': document.getElementById('review-lead-strength').value,
-    'review-lead-growth': document.getElementById('review-lead-growth').value,
-    'archive-capability': document.getElementById('archive-capability').value,
-    'archive-initiative': document.getElementById('archive-initiative').value,
-    'archive-schedule': document.getElementById('archive-schedule').value,
-    'archive-collaboration': document.getElementById('archive-collaboration').value,
-    'archive-wins': document.getElementById('archive-wins').value,
-    'archive-blocker': document.getElementById('archive-blocker').value,
-    'archive-feedback': document.getElementById('archive-feedback').value,
-    'archive-next': document.getElementById('archive-next').value,
-    'archive-evidence': document.getElementById('archive-evidence').value,
+    'archive_member': document.getElementById('archive-member').value,
+    'archive_month': document.getElementById('archive-month').value,
+    'archive_author': document.getElementById('archive-author').value,
+    'archive_workload': document.getElementById('archive-workload').value,
+    'review_self_name': document.getElementById('review-self-name').value,
+    'review_self_strength': document.getElementById('review-self-strength').value,
+    'review_self_growth': document.getElementById('review-self-growth').value,
+    'review_lead_name': document.getElementById('review-lead-name').value,
+    'review_lead_strength': document.getElementById('review-lead-strength').value,
+    'review_lead_growth': document.getElementById('review-lead-growth').value,
+    'archive_capability': document.getElementById('archive-capability').value,
+    'archive_initiative': document.getElementById('archive-initiative').value,
+    'archive_schedule': document.getElementById('archive-schedule').value,
+    'archive_collaboration': document.getElementById('archive-collaboration').value,
+    'archive_wins': document.getElementById('archive-wins').value,
+    'archive_blocker': document.getElementById('archive-blocker').value,
+    'archive_feedback': document.getElementById('archive-feedback').value,
+    'archive_next': document.getElementById('archive-next').value,
+    'archive_evidence': document.getElementById('archive-evidence').value,
   };
 
   STATS.forEach(s => {
-    data['review-self-stats-' + s.key] = parseInt(document.getElementById('review-self-stats-' + s.key)?.value || 5);
-    data['review-lead-stats-' + s.key] = parseInt(document.getElementById('review-lead-stats-' + s.key)?.value || 5);
+    data['review_self_stats_' + s.key] = parseInt(document.getElementById('review-self-stats-' + s.key)?.value || 5);
+    data['review_lead_stats_' + s.key] = parseInt(document.getElementById('review-lead-stats-' + s.key)?.value || 5);
   });
 
   SKILLS.forEach(sk => {
-    data['review-self-skills-' + sk.key] = parseInt(document.getElementById('review-self-skills-' + sk.key)?.value || 0);
-    data['review-lead-skills-' + sk.key] = parseInt(document.getElementById('review-lead-skills-' + sk.key)?.value || 0);
+    data['review_self_skills_' + sk.key] = parseInt(document.getElementById('review-self-skills-' + sk.key)?.value || 0);
+    data['review_lead_skills_' + sk.key] = parseInt(document.getElementById('review-lead-skills-' + sk.key)?.value || 0);
   });
 
   [1,2,3].forEach(i => {
-    data['kpi-name-' + i] = document.getElementById('kpi-name-' + i)?.value || '';
-    data['kpi-target-' + i] = document.getElementById('kpi-target-' + i)?.value || '';
-    data['kpi-actual-' + i] = document.getElementById('kpi-actual-' + i)?.value || '';
+    data['kpi_name_' + i] = document.getElementById('kpi-name-' + i)?.value || '';
+    data['kpi_target_' + i] = document.getElementById('kpi-target-' + i)?.value || '';
+    data['kpi_actual_' + i] = document.getElementById('kpi-actual-' + i)?.value || '';
   });
 
   return data;
+}
+
+const DRAFT_KEY = 'team-review-draft';
+
+function saveDraft() {
+  try {
+    const data = collectData();
+    data['draft-saved-at'] = new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'});
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+    showStatus('info', '💾 임시저장 완료 · ' + data['draft-saved-at']);
+  } catch(e) {
+    showStatus('error', '임시저장 실패: ' + e.message);
+  }
+}
+
+function loadDraft() {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+
+    const textFields = [
+      'archive-member','archive-month','archive-author','archive-workload',
+      'review-self-name','review-self-strength','review-self-growth',
+      'review-lead-name','review-lead-strength','review-lead-growth',
+      'archive-capability','archive-initiative','archive-schedule',
+      'archive-collaboration','archive-wins','archive-blocker',
+      'archive-feedback','archive-next','archive-evidence'
+    ];
+    textFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id] !== undefined) el.value = data[id];
+    });
+
+    STATS.forEach(s => {
+      ['self','lead'].forEach(who => {
+        const key = 'review-' + who + '-stats-' + s.key;
+        const el = document.getElementById(key);
+        if (el && data[key] !== undefined) {
+          el.value = data[key];
+          const valEl = document.getElementById('val-' + who + '-' + s.key);
+          if (valEl) valEl.textContent = data[key];
+        }
+      });
+    });
+
+    SKILLS.forEach(sk => {
+      ['self','lead'].forEach(who => {
+        const key = 'review-' + who + '-skills-' + sk.key;
+        const el = document.getElementById(key);
+        if (el && data[key] !== undefined) el.value = data[key];
+      });
+    });
+
+    [1,2,3].forEach(i => {
+      ['kpi-name-','kpi-target-','kpi-actual-'].forEach(prefix => {
+        const el = document.getElementById(prefix + i);
+        if (el && data[prefix + i] !== undefined) el.value = data[prefix + i];
+      });
+    });
+
+    updateChart();
+    document.getElementById('draft-banner').style.display = 'none';
+    showStatus('success', '✅ 임시저장 내용을 불러왔습니다.');
+  } catch(e) {
+    showStatus('error', '불러오기 실패: ' + e.message);
+  }
+}
+
+function dismissDraft() {
+  document.getElementById('draft-banner').style.display = 'none';
+}
+
+function checkDraft() {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (raw) {
+      const data = JSON.parse(raw);
+      const banner = document.getElementById('draft-banner');
+      const savedAt = data['draft-saved-at'] || '';
+      banner.querySelector('span').textContent = '💾 이전에 작성하던 내용이 있습니다.' + (savedAt ? ' (' + savedAt + ')' : '');
+      banner.style.display = 'flex';
+    }
+  } catch(e) {}
 }
 
 async function submitReview() {
@@ -542,7 +636,7 @@ async function submitReview() {
   btn.textContent = '⏳ 전송 중...';
 
   const data = collectData();
-  data['submitted-at'] = new Date().toISOString();
+  data['submitted-at'] = new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'});
 
   try {
     const res = await fetch(WEBHOOK_URL, {
@@ -552,6 +646,7 @@ async function submitReview() {
     });
 
     if (res.ok) {
+      localStorage.removeItem(DRAFT_KEY);
       showStatus('success', '✅ ' + member + '님의 ' + month + ' 회고가 Notion DB에 저장되었습니다!');
       btn.textContent = '✅ 저장 완료';
     } else {
@@ -576,6 +671,7 @@ renderStats();
 renderSkills();
 renderKPI();
 initChart();
+checkDraft();
 
 const now = new Date();
 document.getElementById('archive-month').value =
