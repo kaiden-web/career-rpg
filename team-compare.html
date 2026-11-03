@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>마케팅팀 역량 비교 점검</title>
+<title>마린 × 앰버 역량 비교</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
@@ -20,6 +20,8 @@
     --border: #CCCCDD;
     --text: #1A1A2E;
     --text-muted: #555577;
+    --marine-color: #6C63FF;
+    --amber-color: #FF6584;
     --self-color: #6C63FF;
     --lead-color: #FF6584;
     --gap-pos: #43D39E;
@@ -280,18 +282,116 @@
   .month-chip.active {
     background: var(--primary); color: white; border-color: var(--primary);
   }
+
+  /* ── Side-by-side compare layout ── */
+  .compare-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .member-card {
+    border-radius: 14px;
+    padding: 20px 24px;
+    border: 2px solid;
+  }
+  .member-card.marine {
+    background: rgba(108,99,255,0.05);
+    border-color: rgba(108,99,255,0.3);
+  }
+  .member-card.amber {
+    background: rgba(255,101,132,0.05);
+    border-color: rgba(255,101,132,0.3);
+  }
+  .member-name {
+    font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;
+  }
+  .member-name.marine { color: var(--marine-color); }
+  .member-name.amber { color: var(--amber-color); }
+  .member-sub { font-size: 0.8rem; color: var(--text-muted); }
+
+  /* ── Compare stat rows (marine | stat | amber) ── */
+  .stat-vs-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 60px 1fr 60px;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+  }
+  .stat-vs-name {
+    text-align: center;
+    font-weight: 700; font-size: 0.78rem;
+    color: var(--text-muted);
+    padding: 3px 6px;
+    background: var(--bg2);
+    border-radius: 6px;
+  }
+  .stat-vs-val {
+    font-weight: 800; font-size: 1.1rem;
+    text-align: center;
+  }
+  .stat-vs-val.marine { color: var(--marine-color); }
+  .stat-vs-val.amber { color: var(--amber-color); }
+  .bar-vs {
+    height: 10px; border-radius: 5px; background: var(--bg2);
+    position: relative; overflow: hidden;
+  }
+  .bar-vs-fill {
+    height: 100%; border-radius: 5px;
+    transition: width .4s;
+  }
+  .bar-vs-fill.marine {
+    background: linear-gradient(90deg, var(--marine-color), #a89fff);
+    float: right;
+  }
+  .bar-vs-fill.amber {
+    background: linear-gradient(90deg, #ff9aad, var(--amber-color));
+  }
+
+  /* ── Skill compare table (2-person) ── */
+  .skill-vs-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+  .skill-vs-table th {
+    background: var(--bg2); color: var(--text-muted);
+    font-size: 0.75rem; font-weight: 700;
+    padding: 8px 12px; text-align: center;
+    border-bottom: 2px solid var(--border);
+  }
+  .skill-vs-table th:first-child { text-align: left; }
+  .skill-vs-table td { padding: 9px 12px; border-bottom: 1px solid var(--bg2); text-align: center; }
+  .skill-vs-table td:first-child { text-align: left; font-weight: 600; }
+  .skill-vs-table tr:last-child td { border-bottom: none; }
+
+  /* ── Text compare 2-col ── */
+  .text-compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .text-col-header {
+    font-size: 0.75rem; font-weight: 700; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .text-col-header.marine { color: var(--marine-color); }
+  .text-col-header.amber { color: var(--amber-color); }
+
+  @media (max-width: 700px) {
+    .compare-header, .text-compare-grid { grid-template-columns: 1fr; }
+    .stat-vs-row { grid-template-columns: 50px 1fr 50px 1fr 50px; }
+  }
 </style>
 </head>
 <body>
 
 <div class="header">
   <div class="header-left">
-    <h1>🔍 마케팅팀 역량 비교 점검</h1>
-    <p>Self 리뷰 × Lead 리뷰 통합 분석</p>
+    <h1>⚔️ 마린 × 앰버 역량 비교</h1>
+    <p>Self 리뷰 × Lead 리뷰 나란히 분석 · 마케팅팀</p>
   </div>
   <div class="header-badges">
-    <span class="badge badge-self">● Self (팀원)</span>
-    <span class="badge badge-lead">● Lead (팀장)</span>
+    <span class="badge badge-self">● 마린</span>
+    <span class="badge badge-lead">● 앰버</span>
   </div>
 </div>
 
@@ -299,13 +399,9 @@
 
   <!-- Filter bar -->
   <div class="filter-bar">
-    <label>팀원</label>
-    <select id="filterMember">
-      <option value="">전체</option>
-    </select>
     <label>기준월</label>
     <select id="filterMonth">
-      <option value="">전체</option>
+      <option value="">월 선택</option>
     </select>
     <button class="btn btn-primary" onclick="loadData()">🔄 불러오기</button>
     <button class="btn btn-secondary" onclick="resetFilter()">초기화</button>
@@ -315,9 +411,9 @@
   <!-- Main content -->
   <div id="mainContent">
     <div class="empty-state">
-      <div class="emoji">📂</div>
-      <div>팀원과 기준월을 선택하고 <strong>불러오기</strong>를 눌러주세요</div>
-      <div style="margin-top:8px;font-size:0.8rem">Notion DB에서 해당 회고 데이터를 가져옵니다</div>
+      <div class="emoji">📊</div>
+      <div>기준월을 선택하고 <strong>불러오기</strong>를 눌러주세요</div>
+      <div style="margin-top:8px;font-size:0.8rem">마린과 앰버의 역량 회고를 나란히 비교합니다</div>
     </div>
   </div>
 
@@ -325,70 +421,9 @@
 
 <script>
 // ─────────────────────────────────────────────
-// CONFIG — Notion DB 조회용 Make.com Webhook
-// team-review.html의 Webhook과 별개로,
-// DB 조회 전용 Make.com 시나리오 Webhook URL을 아래에 입력
+// 마린 × 앰버 역량 비교 — 2026-10 실제 데이터
+// 마린 자기평가 vs 앰버(리드)의 마린 평가
 // ─────────────────────────────────────────────
-const QUERY_WEBHOOK_URL = 'YOUR_QUERY_WEBHOOK_URL_HERE';
-
-// Notion DB 데이터를 직접 조회할 수 없으므로
-// 대안: 로컬 데이터 입력 방식 + Make.com 조회 Webhook 방식 선택 가능
-// 아래 DEMO_DATA는 실제 테스트용 샘플 데이터 (Notion 연결 전 미리보기용)
-const DEMO_DATA = [
-  {
-    'archive-member': '마린',
-    'archive-month': '2026-10',
-    'archive-author': '팀장',
-    'archive-workload': '보통',
-    'review-self-name': '마린',
-    'review-self-strength': '데이터 분석 능력이 향상되었고, 캠페인 성과 리포트를 스스로 작성할 수 있게 되었습니다.',
-    'review-self-growth': '프로모션 기획 단계에서 더 많은 아이디어를 선제적으로 제안하고 싶습니다.',
-    'review-lead-name': '팀장',
-    'review-lead-strength': '맡은 업무를 꼼꼼하게 처리하며 실행력이 높습니다. 데이터를 보는 눈이 빠르게 성장하고 있어요.',
-    'review-lead-growth': '업무 우선순위 설정과 선제적 커뮤니케이션 부분을 더 발전시키면 좋겠습니다.',
-    'review-self-stats-STR': 7,
-    'review-self-stats-AGI': 6,
-    'review-self-stats-SEN': 8,
-    'review-self-stats-INT': 7,
-    'review-self-stats-CHA': 6,
-    'review-self-stats-STA': 7,
-    'review-lead-stats-STR': 7,
-    'review-lead-stats-AGI': 5,
-    'review-lead-stats-SEN': 7,
-    'review-lead-stats-INT': 8,
-    'review-lead-stats-CHA': 6,
-    'review-lead-stats-STA': 7,
-    'review-self-skills-s1': 3,
-    'review-self-skills-s2': 2,
-    'review-self-skills-s3': 2,
-    'review-self-skills-s4': 3,
-    'review-self-skills-s5': 3,
-    'review-self-skills-s6': 2,
-    'review-self-skills-s7': 2,
-    'review-self-skills-s8': 1,
-    'review-lead-skills-s1': 3,
-    'review-lead-skills-s2': 2,
-    'review-lead-skills-s3': 2,
-    'review-lead-skills-s4': 3,
-    'review-lead-skills-s5': 3,
-    'review-lead-skills-s6': 3,
-    'review-lead-skills-s7': 2,
-    'review-lead-skills-s8': 2,
-    'kpi-name-1': '월 매출 ROAS', 'kpi-target-1': '200%', 'kpi-actual-1': '185%',
-    'kpi-name-2': '신규 고객 전환율', 'kpi-target-2': '3.5%', 'kpi-actual-2': '3.8%',
-    'kpi-name-3': '콘텐츠 발행 수', 'kpi-target-3': '20건', 'kpi-actual-3': '18건',
-    'archive-capability': '데이터 분석 역량이 눈에 띄게 성장한 달이었습니다. GA4와 Meta 광고 데이터를 직접 분석하고 인사이트를 도출하는 수준까지 발전했습니다.',
-    'archive-initiative': '경쟁사 모니터링 리포트를 자발적으로 주 1회 작성하여 팀 전체와 공유했습니다.',
-    'archive-schedule': '모든 마감을 준수했으며 사전 공유가 잘 이루어졌습니다.',
-    'archive-collaboration': '신규 팀원 온보딩을 도우며 업무 매뉴얼 작성에 기여했습니다.',
-    'archive-wins': '10월 프로모션 캠페인에서 신규 고객 전환율 목표 초과 달성',
-    'archive-blocker': '광고 소재 제작 리드타임이 길어 타이밍 맞추기가 어려웠습니다.',
-    'archive-feedback': '회의 시간 효율화가 필요합니다. 안건 사전 공유 문화가 정착되면 좋겠습니다.',
-    'archive-next': '네이버 브랜드 스토어 CRM 세그먼트 구축에 집중할 계획입니다.',
-    'archive-evidence': 'GA4 대시보드 링크, 10월 캠페인 성과 보고서',
-    'submitted-at': '2026. 10. 30. 오전 11:07:24'
-  }
-];
 
 const STATS = [
   { key: 'STR', label: '실행력 STR' },
@@ -412,285 +447,305 @@ const SKILLS = [
 
 const SKILL_LEVELS = ['Lv.0 모름', 'Lv.1 개념이해', 'Lv.2 보조수행', 'Lv.3 단독수행', 'Lv.4 최적화', 'Lv.5 가르침'];
 
-let allData = [];
-let radarChart = null;
-
-// ── 초기 데이터 로드 (데모 데이터로 드롭다운 채우기) ──
-window.onload = function() {
-  // 데모 데이터 기반 필터 채우기
-  populateFilters(DEMO_DATA);
-  setStatus('데모 데이터 로드됨 · Notion 연결 시 실제 데이터로 교체됩니다');
+// ── 실제 이메일 데이터 (2026-10) ──
+const REVIEW_DATA = {
+  '2026-10': {
+    month: '2026-10',
+    marine: {
+      name: '마린',
+      role: 'Self 평가',
+      stats: { STR: 8, AGI: 8, SEN: 9, INT: 6, CHA: 7, STA: 8 },
+      skills: { s1: 4, s2: 2, s3: 2, s4: 4, s5: 4, s6: 5, s7: 1, s8: 1 },
+      strength: '1. 얼리블프와 상시 메타 광고를 함께 운영하면서 효율이 떨어지는 구간과 디벨롭이 필요한 소재를 구체적으로 정리한 점\n2. 메타 소재 효율 대시보드, 카카오 플친 대시보드 등을 만들어 이후 회고와 운영 판단에 필요한 데이터를 한 화면에서 확인할 수 있도록 개선하여 업무 단순화 시킨 점\n3. 소재별 ROAS·CTR·구매·지출을 기준으로 고효율 소재와 저효율 소재를 나누고 어떤 후킹 요소·소구점을 유지하거나 바꿔야 하는지 다음 액션까지 빠르게 연결한 점',
+      growth: '콘텐츠 기획과 효율 분석에 그치지 않고 분석 결과를 토대로 실제 매출 개선 액션까지 연결하는 역량을 키우고 싶다. 또한 규모가 작은 프로모션부터 직접 담당해 목표 설정부터 콘텐츠·매체 운영, 일정 관리, 성과 분석까지 전체 흐름을 경험하며 주도적으로 운영할 수 있는 단계로 성장하는 것이 목표.',
+      wins: '반복적으로 발생하던 소재 성과 확인과 회고 자료 정리 소요 시간을 줄이기 위해 메타 소재 효율 대시보드·카카오 플친 대시보드·회고 대시보드를 제작했고 자동화 세팅 시트도 생성.',
+      blocker: '1. 얼리블프 기간에는 광고 세팅, 소재 효율 확인 및 공유, 추가 소재 기획 등 업무가 동시에 몰리면서 메타 운영에 집중하지 못한 점\n2. 신규 소재는 주기적으로 추가가 되는데 효율을 지속적으로 트래킹하지 못한 점',
+      next: '1. 월간 업무 타임라인을 활용해 업무 일정과 진행 상태를 체계적으로 관리\n2. 메타 운영 확실한 정립 필요 — 상품 1개 선택 → 구매 이유 2-3개 정의 → 상황별 후킹 기획',
+      evidence: '회고 대시보드: https://nollo-october-retrospective-20261029.cys8904.chatgpt.site/\n메타 소재 효율 대시보드: https://nollo-meta-creative-share-20261022.sp-mkt-7428.chatgpt.site/\n카카오 플친 효율 대시보드: https://nollo-kakao-friendtalk-20261022.cys8904.chatgpt.site/',
+      scores: { capability: 7, initiative: 6, schedule: 7, collaboration: 7 },
+    },
+    amber: {
+      name: '앰버',
+      role: '리드 평가',
+      stats: { STR: 4, AGI: 6, SEN: 5, INT: 3, CHA: 6, STA: 4 },
+      skills: { s1: 2, s2: 0, s3: 3, s4: 3, s5: 2, s6: 3, s7: 0, s8: 0 },
+      strength: '· 데이터 분석 자동화 대시보드 정리 — 회의 준비에 시간 사용이 제일 많았던 부분, 10월 중 자동화 계획(9월 회고 당시) 미션 완료!\n· 메타 캠페인 운영 시 본인의 시각으로 분석 & 실행',
+      growth: '· 자기 주도적 업무 우선순위 판단 및 효율적 운영\n· 깊이 있는 분석 능력 향상 필요\n· 업무 우선순위/중요도 고려하기\n· 업무의 목적("왜")에 대해 궁금해 하기 → 그래야 목적 달성을 위한 목표 설정 및 HOW를 능동적으로 잡을 수 있음',
+      wins: '· 데이터 분석 자동화 대시보드 정리\n· 광고 효율 관리 AI 자동화',
+      blocker: '· 일자별 메타 광고비 비효율적 운영 — 메타 회신을 기다리며 저효율 캠페인 유지\n· 블프 캠페인 OFF 되지 않아 다음날 오전까지 라이브',
+      next: '· 놀로데이 단독 기획 및 운영\n· 메타 외 전체 광고 채널 컨트롤',
+      feedback: '· 자기 주도적 업무 우선순위 판단 및 효율적 운영\n· 깊이 있는 분석 능력 향상 필요',
+      scores: { capability: 5, initiative: 5, schedule: 4, collaboration: 7 },
+    }
+  }
 };
 
-function populateFilters(data) {
-  const members = [...new Set(data.map(d => d['archive-member']))].filter(Boolean);
-  const months = [...new Set(data.map(d => d['archive-month']))].filter(Boolean).sort().reverse();
+let radarChart = null;
 
-  const mSel = document.getElementById('filterMember');
+window.onload = function() {
   const moSel = document.getElementById('filterMonth');
-
-  // 중복 제거 후 추가
-  members.forEach(m => {
-    if (![...mSel.options].find(o => o.value === m)) {
-      const opt = document.createElement('option');
-      opt.value = m; opt.textContent = m;
-      mSel.appendChild(opt);
-    }
+  Object.keys(REVIEW_DATA).sort().reverse().forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m; opt.textContent = m;
+    moSel.appendChild(opt);
   });
-  months.forEach(m => {
-    if (![...moSel.options].find(o => o.value === m)) {
-      const opt = document.createElement('option');
-      opt.value = m; opt.textContent = m;
-      moSel.appendChild(opt);
-    }
-  });
-
-  allData = data;
-}
+  // 기본값: 2026-10 자동 로드
+  moSel.value = '2026-10';
+  loadData();
+};
 
 function setStatus(msg) {
   document.getElementById('statusMsg').textContent = msg;
 }
 
 function resetFilter() {
-  document.getElementById('filterMember').value = '';
   document.getElementById('filterMonth').value = '';
   document.getElementById('mainContent').innerHTML = `
     <div class="empty-state">
-      <div class="emoji">📂</div>
-      <div>팀원과 기준월을 선택하고 <strong>불러오기</strong>를 눌러주세요</div>
+      <div class="emoji">📊</div>
+      <div>기준월을 선택하고 <strong>불러오기</strong>를 눌러주세요</div>
     </div>`;
   setStatus('');
 }
 
-async function loadData() {
-  const member = document.getElementById('filterMember').value;
+function loadData() {
   const month = document.getElementById('filterMonth').value;
-
-  if (!member && !month) {
-    renderAll(allData);
-    return;
-  }
-
-  let filtered = allData.filter(d => {
-    const mOk = !member || d['archive-member'] === member;
-    const moOk = !month || d['archive-month'] === month;
-    return mOk && moOk;
-  });
-
-  // Notion Webhook 연결 시 여기서 실제 조회
-  // 현재는 데모 데이터에서 필터링
-  if (filtered.length === 0) {
+  if (!month || !REVIEW_DATA[month]) {
     document.getElementById('mainContent').innerHTML = `
       <div class="empty-state">
         <div class="emoji">🔍</div>
-        <div>해당 조건의 데이터가 없습니다</div>
-        <div style="margin-top:8px;font-size:0.8rem">폼에서 제출된 회고 데이터만 조회됩니다</div>
+        <div>해당 월의 데이터가 없습니다</div>
       </div>`;
     return;
   }
-
-  if (filtered.length === 1) {
-    renderSingleRecord(filtered[0]);
-  } else {
-    renderAll(filtered);
-  }
-  setStatus(`${filtered.length}건 조회됨`);
+  renderComparison(REVIEW_DATA[month]);
+  setStatus(`${month} 데이터 로드됨`);
 }
 
-// ── 단일 레코드 상세 뷰 ──
-function renderSingleRecord(d) {
-  const selfAvg = STATS.reduce((s, st) => s + Number(d[`review-self-stats-${st.key}`] || 0), 0) / STATS.length;
-  const leadAvg = STATS.reduce((s, st) => s + Number(d[`review-lead-stats-${st.key}`] || 0), 0) / STATS.length;
-  const gapAvg = selfAvg - leadAvg;
+// ── 스코어 평균 계산 ──
+function statsAvg(stats) {
+  const vals = Object.values(stats);
+  return vals.reduce((a, b) => a + b, 0) / vals.length;
+}
+
+// ── 별점 HTML ──
+function scoreBar(val, cls) {
+  const pct = (val / 10) * 100;
+  return `<div class="bar-vs"><div class="bar-vs-fill ${cls}" style="width:${pct}%"></div></div>`;
+}
+
+// ── 줄바꿈 처리 ──
+function nl2br(str) {
+  return (str || '—').replace(/\n/g, '<br>');
+}
+
+// ── 메인 비교 렌더 ──
+function renderComparison(data) {
+  const m = data.marine, a = data.amber;
+  const mAvg = statsAvg(m.stats), aAvg = statsAvg(a.stats);
+
+  const scoreLabels = [
+    { key: 'capability', label: '역량 성장' },
+    { key: 'initiative', label: '이니셔티브' },
+    { key: 'schedule',   label: '일정 관리' },
+    { key: 'collaboration', label: '팀 협업' },
+  ];
 
   const html = `
-    <!-- Top summary -->
-    <div class="section">
-      <div class="section-title">📋 기본 정보 <span class="tag">${d['archive-month']}</span></div>
-      <div class="grid-2">
-        <div class="identity-card">
-          <div class="info-row"><span class="info-label">팀원</span><span class="info-value">${d['archive-member'] || '-'}</span></div>
-          <div class="info-row"><span class="info-label">작성자</span><span class="info-value">${d['archive-author'] || '-'}</span></div>
-          <div class="info-row"><span class="info-label">업무강도</span><span class="info-value"><span class="workload-chip">${d['archive-workload'] || '-'}</span></span></div>
-          <div class="info-row"><span class="info-label">제출일시</span><span class="info-value" style="font-size:0.82rem;color:var(--text-muted)">${d['submitted-at'] || '-'}</span></div>
+  <!-- 상단 인물 카드 -->
+  <div class="compare-header">
+    <div class="member-card marine">
+      <div class="member-name marine">🟣 ${m.name}</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:10px">${m.role} · ${data.month}</div>
+      <div style="display:flex;gap:16px">
+        <div style="text-align:center">
+          <div style="font-size:0.7rem;color:var(--text-muted)">스탯 평균</div>
+          <div style="font-size:1.8rem;font-weight:900;color:var(--marine-color)">${mAvg.toFixed(1)}</div>
         </div>
-        <div class="score-cards">
-          <div class="score-card">
-            <div class="sc-label">Self 평균</div>
-            <div class="sc-value sc-self">${selfAvg.toFixed(1)}</div>
-          </div>
-          <div class="score-card">
-            <div class="sc-label">Lead 평균</div>
-            <div class="sc-value sc-lead">${leadAvg.toFixed(1)}</div>
-          </div>
-          <div class="score-card">
-            <div class="sc-label">Self−Lead</div>
-            <div class="sc-value sc-gap" style="color:${gapAvg > 0.5 ? 'var(--gap-neg)' : gapAvg < -0.5 ? 'var(--gap-pos)' : 'var(--text-muted)'}">${gapAvg > 0 ? '+' : ''}${gapAvg.toFixed(1)}</div>
-          </div>
+        <div style="flex:1">
+          ${scoreLabels.map(sl => `
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:0.75rem">
+              <span style="width:56px;color:var(--text-muted)">${sl.label}</span>
+              <div class="bar-vs" style="flex:1"><div class="bar-vs-fill marine" style="width:${m.scores[sl.key]*10}%"></div></div>
+              <span style="width:16px;text-align:right;font-weight:700;color:var(--marine-color)">${m.scores[sl.key]}</span>
+            </div>`).join('')}
         </div>
       </div>
     </div>
-
-    <!-- 서로의 시선 -->
-    <div class="section">
-      <div class="section-title">🪞 서로의 시선 — Self vs Lead</div>
-      <div class="review-subhead">💪 강점</div>
-      <div class="review-pair">
-        <div class="review-col">
-          <div class="review-who"><span class="dot dot-self"></span>Self — ${d['review-self-name'] || d['archive-member']}</div>
-          <div class="review-text">${d['review-self-strength'] || '—'}</div>
+    <div class="member-card amber">
+      <div class="member-name amber">🩷 ${a.name}</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:10px">${a.role} · ${data.month}</div>
+      <div style="display:flex;gap:16px">
+        <div style="text-align:center">
+          <div style="font-size:0.7rem;color:var(--text-muted)">스탯 평균</div>
+          <div style="font-size:1.8rem;font-weight:900;color:var(--amber-color)">${aAvg.toFixed(1)}</div>
         </div>
-        <div class="review-col">
-          <div class="review-who"><span class="dot dot-lead"></span>Lead — ${d['review-lead-name'] || d['archive-author']}</div>
-          <div class="review-text">${d['review-lead-strength'] || '—'}</div>
-        </div>
-      </div>
-      <div class="review-subhead">🌱 성장 포인트</div>
-      <div class="review-pair">
-        <div class="review-col">
-          <div class="review-who"><span class="dot dot-self"></span>Self</div>
-          <div class="review-text">${d['review-self-growth'] || '—'}</div>
-        </div>
-        <div class="review-col">
-          <div class="review-who"><span class="dot dot-lead"></span>Lead</div>
-          <div class="review-text">${d['review-lead-growth'] || '—'}</div>
+        <div style="flex:1">
+          ${scoreLabels.map(sl => `
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:0.75rem">
+              <span style="width:56px;color:var(--text-muted)">${sl.label}</span>
+              <div class="bar-vs" style="flex:1"><div class="bar-vs-fill amber" style="width:${a.scores[sl.key]*10}%"></div></div>
+              <span style="width:16px;text-align:right;font-weight:700;color:var(--amber-color)">${a.scores[sl.key]}</span>
+            </div>`).join('')}
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- 6대 스탯 비교 -->
-    <div class="section">
-      <div class="section-title">⚔️ 6대 스탯 비교</div>
-      <div class="grid-2" style="align-items:start">
-        <div>
-          <div class="stat-header">
-            <span class="sh-left">스탯</span>
-            <span style="text-align:left">Self ─── Lead</span>
-            <span>Self</span>
-            <span>Lead</span>
-            <span>GAP</span>
-          </div>
-          ${STATS.map(st => {
-            const sv = Number(d[`review-self-stats-${st.key}`] || 0);
-            const lv = Number(d[`review-lead-stats-${st.key}`] || 0);
-            const gap = sv - lv;
-            const gapClass = gap > 0 ? 'gap-pos' : gap < 0 ? 'gap-neg' : 'gap-zero';
-            const gapStr = gap > 0 ? `+${gap}` : `${gap}`;
-            return `
-              <div class="stat-compare-row">
-                <div class="stat-name">${st.key}</div>
-                <div class="bar-wrap">
-                  <div class="bar-self" style="width:${sv * 10}%"></div>
-                  <div class="bar-lead-line" style="left:calc(${lv * 10}% - 1.5px)"></div>
-                </div>
-                <div class="val-self">${sv}</div>
-                <div class="val-lead">${lv}</div>
-                <div class="val-gap ${gapClass}">${gapStr}</div>
-              </div>`;
-          }).join('')}
-          <div style="font-size:0.72rem;color:var(--text-muted);margin-top:8px">
-            <span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px">
-              <span style="width:12px;height:4px;background:var(--self-color);border-radius:2px;display:inline-block"></span> Self 바
-            </span>
-            <span style="display:inline-flex;align-items:center;gap:4px">
-              <span style="width:3px;height:12px;background:var(--lead-color);border-radius:1px;display:inline-block"></span> Lead 마커
-            </span>
-          </div>
+  <!-- 6대 스탯 레이더 + VS 바 -->
+  <div class="section">
+    <div class="section-title">⚔️ 6대 스탯 비교</div>
+    <div class="grid-2" style="align-items:start;gap:20px">
+      <div>
+        <!-- VS 바 -->
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:8px;display:flex;gap:16px">
+          <span>🟣 마린 Self</span><span>🩷 앰버 리드 평가</span>
         </div>
-        <div>
-          <div class="chart-wrap">
-            <canvas id="radarCanvas" width="320" height="280"></canvas>
-          </div>
-          <div class="chart-legend">
-            <div class="legend-item"><div class="legend-dot" style="background:var(--self-color)"></div>Self</div>
-            <div class="legend-item"><div class="legend-dot" style="background:var(--lead-color)"></div>Lead</div>
-          </div>
+        ${STATS.map(st => {
+          const mv = m.stats[st.key], av = a.stats[st.key];
+          const gap = mv - av;
+          const gapCol = gap > 0 ? 'var(--marine-color)' : gap < 0 ? 'var(--amber-color)' : 'var(--text-muted)';
+          return `
+          <div class="stat-vs-row" style="display:grid;grid-template-columns:60px 1fr 44px 1fr 44px;align-items:center;gap:6px;margin-bottom:10px">
+            <div class="stat-vs-val marine">${mv}</div>
+            <div class="bar-vs"><div class="bar-vs-fill marine" style="width:${mv*10}%"></div></div>
+            <div style="text-align:center;font-weight:700;font-size:0.82rem">${st.key}</div>
+            <div class="bar-vs"><div class="bar-vs-fill amber" style="width:${av*10}%"></div></div>
+            <div class="stat-vs-val amber">${av}</div>
+          </div>`;
+        }).join('')}
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px">
+          * 마린 자기평가 vs 앰버 리드평가 — 기준이 다를 수 있으므로 GAP은 참고용
+        </div>
+      </div>
+      <div>
+        <div class="chart-wrap">
+          <canvas id="radarCanvas" width="300" height="260"></canvas>
+        </div>
+        <div class="chart-legend" style="justify-content:center;gap:20px">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--marine-color)"></div>마린 Self</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--amber-color)"></div>앰버 리드</div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- 스킬 비교 -->
-    <div class="section">
-      <div class="section-title">🛠️ 스킬 레벨 비교</div>
-      <table class="skill-table">
-        <thead>
+  <!-- 스킬 비교 테이블 -->
+  <div class="section">
+    <div class="section-title">🛠️ 스킬 레벨 비교</div>
+    <table class="skill-vs-table">
+      <thead>
+        <tr>
+          <th>스킬</th>
+          <th style="color:var(--marine-color)">🟣 마린 Self</th>
+          <th style="color:var(--amber-color)">🩷 앰버 리드</th>
+          <th>차이</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${SKILLS.map(sk => {
+          const mv = m.skills[sk.key], av = a.skills[sk.key];
+          const gap = mv - av;
+          const gapStr = gap > 0 ? `+${gap}` : `${gap}`;
+          const gapCol = gap > 1 ? '#FF6584' : gap < -1 ? '#22CC88' : 'var(--text-muted)';
+          return `
           <tr>
-            <th>스킬</th>
-            <th>Self</th>
-            <th>Lead</th>
-            <th>GAP</th>
-            <th>해석</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${SKILLS.map(sk => {
-            const sv = Number(d[`review-self-skills-${sk.key}`] || 0);
-            const lv = Number(d[`review-lead-skills-${sk.key}`] || 0);
-            const gap = sv - lv;
-            const interp = gap > 1 ? '⚠️ 과대평가 경향' : gap < -1 ? '✅ 성장 여지 인식' : '✓ 합치';
-            return `
-              <tr>
-                <td>${sk.label}</td>
-                <td><span class="lv-chip lv-${sv}">${SKILL_LEVELS[sv]}</span></td>
-                <td><span class="lv-chip lv-${lv}">${SKILL_LEVELS[lv]}</span></td>
-                <td style="font-weight:700;color:${gap > 0 ? 'var(--gap-neg)' : gap < 0 ? 'var(--gap-pos)' : 'var(--text-muted)'}">${gap > 0 ? '+' : ''}${gap}</td>
-                <td style="font-size:0.78rem;color:var(--text-muted)">${interp}</td>
-              </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
-      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:12px">
-        ⚠️ GAP +2↑: Self가 Lead보다 높게 평가 (과대평가 주의) · ✅ GAP -1↓: Lead가 더 높게 평가 (성장 기대)
+            <td>${sk.label}</td>
+            <td><span class="lv-chip lv-${mv}">${SKILL_LEVELS[mv]}</span></td>
+            <td><span class="lv-chip lv-${av}">${SKILL_LEVELS[av]}</span></td>
+            <td style="font-weight:700;color:${gapCol}">${gapStr}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+    <div style="font-size:0.74rem;color:var(--text-muted);margin-top:10px">
+      +값: 마린이 자신을 더 높게 평가 · -값: 앰버 리드가 더 높게 평가
+    </div>
+  </div>
+
+  <!-- 서로의 시선 비교 -->
+  <div class="section">
+    <div class="section-title">🪞 서로의 시선 — 강점</div>
+    <div class="text-compare-grid">
+      <div>
+        <div class="text-col-header marine">🟣 마린 자기평가</div>
+        <div class="retro-text">${nl2br(m.strength)}</div>
+      </div>
+      <div>
+        <div class="text-col-header amber">🩷 앰버 리드 평가</div>
+        <div class="retro-text">${nl2br(a.strength)}</div>
       </div>
     </div>
+  </div>
 
-    <!-- KPI -->
-    <div class="section">
-      <div class="section-title">🎯 KPI 달성 현황</div>
-      <table class="kpi-table">
-        <thead><tr><th>KPI 항목</th><th>목표</th><th>실적</th></tr></thead>
-        <tbody>
-          ${[1,2,3].map(i => d[`kpi-name-${i}`] ? `
-            <tr>
-              <td>${d[`kpi-name-${i}`]}</td>
-              <td>${d[`kpi-target-${i}`] || '-'}</td>
-              <td>${d[`kpi-actual-${i}`] || '-'}</td>
-            </tr>` : '').join('')}
-        </tbody>
-      </table>
-    </div>
-
-    <!-- 종합 회고 -->
-    <div class="section">
-      <div class="section-title">📝 종합 회고</div>
-      <div class="grid-2">
-        ${[
-          ['archive-capability', '역량 성장 스토리'],
-          ['archive-initiative', '자기주도 이니셔티브'],
-          ['archive-schedule', '일정 관리'],
-          ['archive-collaboration', '팀 협업 기여'],
-          ['archive-wins', '이달의 WIN 🏆'],
-          ['archive-blocker', '블로커 & 배움'],
-          ['archive-feedback', '팀에게 피드백'],
-          ['archive-next', '다음 달 목표'],
-        ].map(([key, label]) => `
-          <div class="retro-block">
-            <div class="retro-label">${label}</div>
-            <div class="retro-text">${d[key] || '—'}</div>
-          </div>`).join('')}
+  <div class="section">
+    <div class="section-title">🌱 성장 포인트</div>
+    <div class="text-compare-grid">
+      <div>
+        <div class="text-col-header marine">🟣 마린 스스로</div>
+        <div class="retro-text">${nl2br(m.growth)}</div>
       </div>
-      ${d['archive-evidence'] ? `
-        <div class="retro-block" style="margin-top:8px">
-          <div class="retro-label">성장 증거 자료</div>
-          <div class="retro-text">${d['archive-evidence']}</div>
-        </div>` : ''}
+      <div>
+        <div class="text-col-header amber">🩷 앰버 관점</div>
+        <div class="retro-text">${nl2br(a.growth)}</div>
+      </div>
     </div>
+  </div>
+
+  <!-- 이달의 WIN + 블로커 -->
+  <div class="section">
+    <div class="section-title">🏆 이달의 WIN</div>
+    <div class="text-compare-grid">
+      <div>
+        <div class="text-col-header marine">🟣 마린</div>
+        <div class="retro-text">${nl2br(m.wins)}</div>
+      </div>
+      <div>
+        <div class="text-col-header amber">🩷 앰버</div>
+        <div class="retro-text">${nl2br(a.wins)}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🧱 블로커</div>
+    <div class="text-compare-grid">
+      <div>
+        <div class="text-col-header marine">🟣 마린</div>
+        <div class="retro-text">${nl2br(m.blocker)}</div>
+      </div>
+      <div>
+        <div class="text-col-header amber">🩷 앰버</div>
+        <div class="retro-text">${nl2br(a.blocker)}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 다음 달 목표 -->
+  <div class="section">
+    <div class="section-title">🎯 다음 달 목표</div>
+    <div class="text-compare-grid">
+      <div>
+        <div class="text-col-header marine">🟣 마린 목표</div>
+        <div class="retro-text">${nl2br(m.next)}</div>
+      </div>
+      <div>
+        <div class="text-col-header amber">🩷 앰버 → 마린 목표</div>
+        <div class="retro-text">${nl2br(a.next)}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 마린 증거자료 -->
+  <div class="section">
+    <div class="section-title">📎 성장 증거자료 (마린)</div>
+    <div class="retro-text">${nl2br(m.evidence)}</div>
+  </div>
   `;
 
   document.getElementById('mainContent').innerHTML = html;
 
-  // 레이더 차트 렌더
+  // 레이더 차트
   const ctx = document.getElementById('radarCanvas').getContext('2d');
   if (radarChart) radarChart.destroy();
   radarChart = new Chart(ctx, {
@@ -699,20 +754,20 @@ function renderSingleRecord(d) {
       labels: STATS.map(s => s.key),
       datasets: [
         {
-          label: 'Self',
-          data: STATS.map(s => Number(d[`review-self-stats-${s.key}`] || 0)),
+          label: '마린 Self',
+          data: STATS.map(s => m.stats[s.key]),
           backgroundColor: 'rgba(108,99,255,0.15)',
           borderColor: '#6C63FF',
           pointBackgroundColor: '#6C63FF',
-          pointRadius: 4,
+          pointRadius: 4, borderWidth: 2,
         },
         {
-          label: 'Lead',
-          data: STATS.map(s => Number(d[`review-lead-stats-${s.key}`] || 0)),
+          label: '앰버 리드',
+          data: STATS.map(s => a.stats[s.key]),
           backgroundColor: 'rgba(255,101,132,0.1)',
           borderColor: '#FF6584',
           pointBackgroundColor: '#FF6584',
-          pointRadius: 4,
+          pointRadius: 4, borderWidth: 2,
         }
       ]
     },
@@ -723,50 +778,11 @@ function renderSingleRecord(d) {
           min: 0, max: 10,
           ticks: { stepSize: 2, color: '#8888AA', font: { size: 9 } },
           grid: { color: '#E0E0EE' },
-          pointLabels: { font: { size: 10 }, color: '#555577' },
+          pointLabels: { font: { size: 11, weight: '700' }, color: '#555577' },
         }
       }
     }
   });
-}
-
-function renderAll(data) {
-  if (data.length === 1) {
-    renderSingleRecord(data[0]);
-    return;
-  }
-  // 여러 레코드: 목록 카드 형태로 표시
-  const html = data.map(d => {
-    const selfAvg = STATS.reduce((s, st) => s + Number(d[`review-self-stats-${st.key}`] || 0), 0) / STATS.length;
-    const leadAvg = STATS.reduce((s, st) => s + Number(d[`review-lead-stats-${st.key}`] || 0), 0) / STATS.length;
-    const gap = selfAvg - leadAvg;
-    return `
-      <div class="section" style="cursor:pointer" onclick="renderSingleRecord(${JSON.stringify(d).replace(/</g,'&lt;')})">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-          <div>
-            <div style="font-weight:700;font-size:1rem">${d['archive-member']} <span style="color:var(--text-muted);font-weight:400;font-size:0.85rem">· ${d['archive-month']}</span></div>
-            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:3px">작성자: ${d['archive-author']} · 업무강도: ${d['archive-workload']}</div>
-          </div>
-          <div style="display:flex;gap:12px;align-items:center">
-            <div style="text-align:center">
-              <div style="font-size:0.72rem;color:var(--text-muted)">Self 평균</div>
-              <div style="font-size:1.2rem;font-weight:800;color:var(--self-color)">${selfAvg.toFixed(1)}</div>
-            </div>
-            <div style="text-align:center">
-              <div style="font-size:0.72rem;color:var(--text-muted)">Lead 평균</div>
-              <div style="font-size:1.2rem;font-weight:800;color:var(--lead-color)">${leadAvg.toFixed(1)}</div>
-            </div>
-            <div style="text-align:center">
-              <div style="font-size:0.72rem;color:var(--text-muted)">GAP</div>
-              <div style="font-size:1.2rem;font-weight:800;color:${Math.abs(gap) < 0.5 ? 'var(--text-muted)' : gap > 0 ? 'var(--gap-neg)' : 'var(--gap-pos)'}">${gap > 0 ? '+' : ''}${gap.toFixed(1)}</div>
-            </div>
-            <div style="color:var(--text-muted);font-size:1.2rem">›</div>
-          </div>
-        </div>
-      </div>`;
-  }).join('');
-  document.getElementById('mainContent').innerHTML =
-    `<div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">총 ${data.length}건 · 클릭하면 상세 비교를 볼 수 있습니다</div>` + html;
 }
 </script>
 </body>
