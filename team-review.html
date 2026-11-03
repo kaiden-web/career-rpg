@@ -183,7 +183,7 @@
           <select id="archive-member">
             <option value="">선택하세요</option>
             <option value="마린">마린</option>
-            <option value="기타">기타 (직접 입력)</option>
+            <option value="제이">제이</option>
           </select>
         </div>
         <div class="form-group">
@@ -192,7 +192,12 @@
         </div>
         <div class="form-group">
           <label>작성자 (팀장)</label>
-          <input type="text" id="archive-author" value="앰버" placeholder="앰버">
+          <select id="archive-author">
+            <option value="">선택하세요</option>
+            <option value="카이든">카이든</option>
+            <option value="앰버">앰버</option>
+            <option value="올리비아">올리비아</option>
+          </select>
         </div>
         <div class="form-group">
           <label>이달 업무 강도</label>
@@ -216,7 +221,11 @@
         <div class="person-header">팀원 자기 평가 <span class="person-tag tag-self">Self</span></div>
         <div class="form-group">
           <label>팀원 이름 (자기 평가 기준)</label>
-          <input type="text" id="review-self-name" placeholder="예: 마린">
+          <select id="review-self-name">
+            <option value="">선택하세요</option>
+            <option value="마린">마린</option>
+            <option value="제이">제이</option>
+          </select>
         </div>
         <div class="form-group">
           <label>이달 가장 잘한 것 (본인 시각)</label>
@@ -231,7 +240,12 @@
         <div class="person-header">팀장 평가 <span class="person-tag tag-lead">Lead</span></div>
         <div class="form-group">
           <label>팀장 이름</label>
-          <input type="text" id="review-lead-name" value="앰버" placeholder="앰버">
+          <select id="review-lead-name">
+            <option value="">선택하세요</option>
+            <option value="카이든">카이든</option>
+            <option value="앰버">앰버</option>
+            <option value="올리비아">올리비아</option>
+          </select>
         </div>
         <div class="form-group">
           <label>이달 가장 잘한 것 (팀장 시각)</label>
@@ -355,7 +369,7 @@
   <div class="submit-area">
     <button class="btn-draft" onclick="saveDraft()" style="background:transparent; color:#6C63FF; border:2px solid #6C63FF; border-radius:10px; padding:14px 28px; font-size:1rem; font-weight:600; cursor:pointer; transition:all 0.2s; margin-right:10px;">💾 임시저장</button>
     <button class="btn-submit" onclick="submitReview()">📤 Notion DB에 저장</button>
-    <p class="submit-note">⚠️ 제출 후 수정 불가 · 팀장(앰버)만 Notion DB 접근 가능</p>
+    <p class="submit-note">⚠️ 제출 후 수정 불가 · 팀장(카이든/앰버/올리비아)만 Notion DB 접근 가능</p>
     <div id="status-msg" class="status-msg"></div>
   </div>
 
@@ -497,8 +511,16 @@ function switchTab(name, el) {
 }
 
 function collectData() {
+  const memberEmailMap = {
+    '마린': ['marine@sparkpetkorea.com', 'amber@sparkpetkorea.com', 'kaiden@sparkpetkorea.com'],
+    '제이': ['jay@sparkpetkorea.com', 'olivia@sparkpetkorea.com', 'kaiden@sparkpetkorea.com'],
+    '올리비아': ['olivia@sparkpetkorea.com', 'kaiden@sparkpetkorea.com'],
+    '앰버': ['amber@sparkpetkorea.com', 'kaiden@sparkpetkorea.com'],
+  };
+  const member = document.getElementById('archive-member').value;
   const data = {
-    'archive_member': document.getElementById('archive-member').value,
+    'archive_member': member,
+    'archive_recipients': (memberEmailMap[member] || ['kaiden@sparkpetkorea.com']).join(','),
     'archive_month': document.getElementById('archive-month').value,
     'archive_author': document.getElementById('archive-author').value,
     'archive_workload': document.getElementById('archive-workload').value,
