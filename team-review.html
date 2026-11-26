@@ -1140,6 +1140,29 @@
   <p style="margin:0 0 8px"><strong>새 팀 기록은 공동 저장 버전에서 작성하세요.</strong></p>
   <p style="margin:0 0 10px">이 페이지의 기록은 이 브라우저에 저장됩니다. 이전 기록은 JSON으로 내보낸 뒤 공동 저장 버전에서 가져올 수 있습니다.</p>
   <a href="https://sparkpet-team-growth.sp-mkt-7428.chatgpt.site/" style="color:#6034a5;font-weight:700">팀 공동 성장 기록 열기</a>
+  <p id="legacy-draft-recovery" hidden style="margin:12px 0 0">
+    <button type="button" id="legacy-draft-export">이전 회고 양식의 임시저장 백업</button>
+    <small>이 파일에는 이전 양식의 초안이 원본 형식으로 담깁니다.</small>
+  </p>
+  <script>
+  (() => {
+    try {
+      if (!localStorage.getItem('team-review-draft')) return;
+      const recovery = document.getElementById('legacy-draft-recovery');
+      recovery.hidden = false;
+      document.getElementById('legacy-draft-export').addEventListener('click', () => {
+        const draft = localStorage.getItem('team-review-draft');
+        if (!draft) { recovery.hidden = true; return; }
+        const url = URL.createObjectURL(new Blob([draft], {type: 'application/json'}));
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'legacy-team-review-draft.json';
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      });
+    } catch {}
+  })();
+  </script>
 </aside>
 <nav class="tabs" aria-label="성장 기록 메뉴"><button class="tab-btn active" onclick="switchTab('archive')">역량 점검 · 월간 기록</button><button class="tab-btn" onclick="switchTab('stats')">6대 스탯 참고</button><button class="tab-btn" onclick="switchTab('skills')">스킬 기준 참고</button><button class="tab-btn" onclick="switchTab('types')">성장 유형 도감</button></nav>
 <section class="tab-panel" id="tab-stats"><div class="card"><h2>6대 스탯 참고</h2><p class="archive-note">점검은 월간 기록에서 팀원·팀장 시선으로 작성해주세요.</p><div id="stats-reference"></div><button class="btn btn-primary" onclick="switchTab('archive')">월간 기록으로 돌아가기</button></div></section>
